@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Produk ke Firestore - Azarine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: #f1f8e9; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .card { background: white; border-radius: 24px; padding: 3rem; max-width: 700px; width: 100%; box-shadow: 0 10px 30px rgba(85,139,47,0.08); border: 1px solid rgba(85,139,47,0.1); }
+        h1 { color: #255d00; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .subtitle { color: #607d8b; margin-bottom: 2rem; }
+        .btn { display: inline-block; padding: 1rem 2.5rem; border-radius: 50px; font-weight: 700; border: none; cursor: pointer; font-size: 1rem; font-family: 'Outfit', sans-serif; transition: all 0.3s ease; }
+        .btn-primary { background: #558b2f; color: white; width: 100%; }
+        .btn-primary:hover { background: #255d00; }
+        .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+        #log { margin-top: 2rem; background: #1a2510; border-radius: 16px; padding: 1.5rem; font-size: 0.85rem; font-family: monospace; color: #a5d6a7; max-height: 400px; overflow-y: auto; display: none; }
+        .log-entry { margin-bottom: 0.4rem; }
+        .log-ok { color: #69f0ae; }
+        .log-err { color: #ff5252; }
+        .log-info { color: #82b1ff; }
+        .warning { background: #fff3e0; border: 1px solid #ffcc02; border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; color: #e65100; font-size: 0.9rem; }
+        .warning strong { display: block; margin-bottom: 0.3rem; }
+        .progress-bar-wrap { background: #e8f5e9; border-radius: 50px; height: 12px; margin: 1.5rem 0; display: none; }
+        .progress-bar { background: #558b2f; border-radius: 50px; height: 100%; width: 0%; transition: width 0.3s ease; }
+        .count { text-align: center; color: #558b2f; font-weight: 600; margin-bottom: 0.5rem; display: none; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>🌿 Seed Data Produk Azarine</h1>
+    <p class="subtitle">Halaman ini akan mengimpor <strong>13 produk</strong> dari daftar_produk.md langsung ke Firestore Anda.</p>
+
+    <div class="warning">
+        <strong>⚠️ Pastikan sebelum menjalankan:</strong>
+        1. Firestore Rules sudah diatur ke <code>allow read, write: if true</code><br>
+        2. Halaman ini hanya perlu dijalankan <strong>satu kali</strong>.<br>
+        3. Jika produk sudah ada, klik "Hapus Semua Produk Dulu" terlebih dahulu agar tidak duplikat.
+    </div>
+
+    <div class="count" id="countDisplay"></div>
+    <div class="progress-bar-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
+
+    <button class="btn btn-primary" id="seedBtn" onclick="seedProducts()">🚀 Import Semua Produk ke Firestore</button>
+    <br><br>
+    <button class="btn" style="background: #e53935; color: white; width: 100%; border-radius: 50px; font-weight: 700; font-family: 'Outfit'; font-size: 1rem; padding: 1rem; cursor: pointer;" onclick="clearProducts()">🗑️ Hapus Semua Produk Dulu (Reset)</button>
+
+    <div id="log"></div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
+<script src="../firebase-config.js"></script>
+
+<script>
+const products = [
+    // ============ SUNSCREEN ============
+    {
+        name: "Azarine Hydrasoothe Sunscreen Gel SPF 45 PA++++",
+        category: "sunscreen",
+        desc: "Sunscreen dalam bentuk gel (water base) yang sangat ringan, dingin, dan mudah meresap. Cocok untuk seluruh jenis kulit, terutama kulit berminyak, kombinasi, dan rentan berjerawat (acne-prone). Tanpa white cast, 0% alkohol, dan oil-free.",
+        ingredients: "Royal Jelly, Aloe Vera, Green Tea, Resveratrol",
+        price: "Rp 66.000 - Rp 73.000",
+        image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: true,
+        sort: 1
+    },
+    {
+        name: "Azarine Hydramax-C Sunscreen Serum SPF 50 PA++++",
+        category: "sunscreen",
+        desc: "Sunscreen harian bertekstur krim-gel yang sangat menghidrasi dan membuat kulit tampak glowing. Sangat direkomendasikan untuk pemilik kulit kering, kusam, dan normal. Mengandung Vitamin C dosis tinggi.",
+        ingredients: "Vitamin C, Hyaluronic Acid, Ectoin",
+        price: "Rp 47.000 - Rp 68.000",
+        image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 2
+    },
+    {
+        name: "Azarine Calm My Acne Sunscreen Moisturiser SPF 35 PA+++",
+        category: "sunscreen",
+        desc: "Sunscreen yang dirancang khusus untuk merawat kulit berminyak dan berjerawat aktif. Mampu meredakan kemerahan, menenangkan jerawat yang meradang, serta meminimalisir produksi sebum tanpa menyumbat pori-pori.",
+        ingredients: "Bakuchiol, Centella Asiatica, Pionin",
+        price: "Rp 36.500 - Rp 40.000",
+        image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 3
+    },
+    {
+        name: "Azarine Cicamide Barrier Sunscreen Moisturiser SPF 35 PA+++",
+        category: "sunscreen",
+        desc: "Sunscreen yang berfokus menjaga kekuatan skin barrier sekaligus memberikan perlindungan medium dari sinar matahari. Sangat direkomendasikan bagi pemilik kulit sensitif, kemerahan, atau skin barrier yang rusak.",
+        ingredients: "5X Ceramide, Centella Asiatica, Squalane",
+        price: "Rp 39.000 - Rp 43.000",
+        image: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 4
+    },
+    {
+        name: "Azarine Body Guard Moisturizer Sunscreen Serum (100ml)",
+        category: "sunscreen",
+        desc: "Sunscreen khusus untuk perlindungan kulit tubuh. Bertekstur ringan dan cepat meresap dengan sensasi dingin instan. Membantu melindungi sekaligus mencerahkan kulit tubuh kusam secara merata.",
+        ingredients: "Niacinamide, Hyaluronic Acid, Aloe Vera",
+        price: "Rp 62.000 - Rp 65.000",
+        image: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 5
+    },
+    // ============ SERUM ============
+    {
+        name: "Azarine Niacinamide 5% + Moisture Sepiwhite Serum (20ml)",
+        category: "serum",
+        desc: "Serum berkinerja tinggi untuk memudarkan noda hitam bekas jerawat (PIE/PIH) dan meratakan warna kulit. Membantu mencerahkan wajah kusam dengan menghambat produksi melanin secara aman.",
+        ingredients: "Niacinamide 5%, Sepiwhite, Centella Asiatica",
+        price: "Rp 59.000",
+        image: "https://images.unsplash.com/photo-1631390243880-fb0a00e24de8?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: true,
+        sort: 6
+    },
+    {
+        name: "Azarine Acne Spot Serum (20ml)",
+        category: "serum",
+        desc: "Serum totol jerawat cair yang diformulasikan khusus untuk mengempeskan jerawat membandel dan meredakan peradangan dengan sangat cepat tanpa membuat kulit di sekitarnya menjadi kering.",
+        ingredients: "Succinic Acid, Cinnamon Bark, Centella Asiatica",
+        price: "Rp 29.000 - Rp 35.000",
+        image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 7
+    },
+    {
+        name: "Azarine Retinol Smooth Glowing Serum (20ml)",
+        category: "serum",
+        desc: "Serum retinol yang ramah untuk pemula dan pemilik kulit sensitif. Membantu mempercepat regenerasi sel kulit baru, memudarkan garis halus/kerutan, serta menghaluskan tekstur kulit wajah yang kasar.",
+        ingredients: "Encapsulated Retinol, Ceramide, Resveratrol",
+        price: "Rp 50.000 - Rp 60.000",
+        image: "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 8
+    },
+    {
+        name: "Azarine AHA-BHA-PHA Peeling Serum (20ml)",
+        category: "serum",
+        desc: "Serum eksfoliasi mingguan untuk mengangkat tumpukan sel kulit mati yang menyumbat pori-pori dan memicu bruntusan. Menjadikan kulit wajah instan lebih halus, kenyal, dan bercahaya.",
+        ingredients: "AHA, BHA, PHA, Mugwort",
+        price: "Rp 35.000 - Rp 50.000",
+        image: "https://images.unsplash.com/photo-1598452963314-b09f397a5c48?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 9
+    },
+    {
+        name: "Azarine Hydramax Water Bank Serum (20ml)",
+        category: "serum",
+        desc: "Serum hidrasi intensif yang secara aktif mengunci kadar air di dalam lapisan kulit, mencegah dehidrasi, serta membuat kulit kenyal layaknya jelly.",
+        ingredients: "Quadruple Hyaluronic Acid, Panthenol, Ceramide",
+        price: "Rp 45.000 - Rp 55.000",
+        image: "https://images.unsplash.com/photo-1631390243880-fb0a00e24de8?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 10
+    },
+    // ============ MOISTURIZER ============
+    {
+        name: "Azarine Oil Free Brightening Daily Moisturizer (40ml)",
+        category: "moisturizer",
+        desc: "Pelembap harian bertekstur gel ringan tanpa minyak (oil-free). Membantu melembabkan, menenangkan kulit kemerahan, sekaligus mengontrol kelebihan produksi sebum di siang hari.",
+        ingredients: "Centella Asiatica, Royal Jelly, Arbutin",
+        price: "Rp 48.000 - Rp 70.000",
+        image: "https://images.unsplash.com/photo-1556228841-a3c527ebefe5?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: true,
+        sort: 11
+    },
+    {
+        name: "Azarine Intense Luminous Barrier Moisturizer (30g)",
+        category: "moisturizer",
+        desc: "Pelembap bertekstur krim-gel lembut yang fokus untuk mencerahkan wajah kusam sekaligus memperbaiki skin barrier yang rusak. Cocok digunakan siang dan malam hari.",
+        ingredients: "Jeju Rice Water, Oxyresveratrol, Ceramide",
+        price: "Rp 40.000 - Rp 55.000",
+        image: "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 12
+    },
+    {
+        name: "Azarine Pure Radiance Barrier Moisturizer (30g)",
+        category: "moisturizer",
+        desc: "Pelembap penenang skin barrier yang diformulasikan khusus untuk mengontrol pori-pori besar dan produksi minyak berlebih. Tekstur gel-nya langsung menyerap dan memberikan efek matte segar.",
+        ingredients: "Zinc PCA, Witch Hazel, Ceramide",
+        price: "Rp 40.000 - Rp 55.000",
+        image: "https://images.unsplash.com/photo-1556228841-a3c527ebefe5?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 13
+    },
+    {
+        name: "Azarine Advanced Youth Barrier Moisturizer (30g)",
+        category: "moisturizer",
+        desc: "Pelembap anti-aging yang kaya akan nutrisi untuk meminimalisir penampakan kerutan, mengencangkan kulit kendur, dan memperkuat skin barrier dari serangan polusi serta usia.",
+        ingredients: "Vegan Retinol, Peptide, Ceramide",
+        price: "Rp 40.000 - Rp 55.000",
+        image: "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 14
+    },
+    // ============ FACIAL WASH ============
+    {
+        name: "Azarine Acne Gentle Cleansing Foam (60ml)",
+        category: "facialwash",
+        desc: "Pembersih wajah bertekstur busa lembut bebas sabun (soap-free) yang diformulasikan khusus untuk merawat kulit berjerawat dan sensitif. Membersihkan sisa kotoran dan makeup tanpa mengikis minyak alami kulit.",
+        ingredients: "Salicylic Acid, Portulaca, Allantoin",
+        price: "Rp 23.000 - Rp 36.000",
+        image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: true,
+        sort: 15
+    },
+    {
+        name: "Azarine Brightening Glow Facial Cleanser (60ml)",
+        category: "facialwash",
+        desc: "Sabun pembersih wajah busa melimpah yang diperkaya vitamin C untuk mencerahkan kulit wajah kusam, meratakan pigmentasi, serta mengembalikan kilau alami wajah sejak pencucian pertama.",
+        ingredients: "Vitamin C, Papaya Extract, Lemon Extract",
+        price: "Rp 25.000 - Rp 35.000",
+        image: "https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 16
+    },
+    {
+        name: "Azarine Active Bright Brightening Creamy Facial Foam (50ml)",
+        category: "facialwash",
+        desc: "Sabun pembersih wajah bertekstur krim padat yang efektif mengangkat sel kulit mati dan minyak berlebih secara mendalam. Hasilnya: kulit segar, bersih menyeluruh, dan tampak setingkat lebih cerah.",
+        ingredients: "Niacinamide, Arbutin, Hyaluronic Acid",
+        price: "Rp 18.000 - Rp 25.000",
+        image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&q=80&w=600",
+        link: "https://shopee.co.id/azarinecosmetic",
+        isBestSeller: false,
+        sort: 17
+    }
+];
+
+function log(msg, type = 'info') {
+    const logEl = document.getElementById('log');
+    logEl.style.display = 'block';
+    const entry = document.createElement('div');
+    entry.className = `log-entry log-${type}`;
+    entry.innerText = msg;
+    logEl.appendChild(entry);
+    logEl.scrollTop = logEl.scrollHeight;
+}
+
+async function seedProducts() {
+    const btn = document.getElementById('seedBtn');
+    const progressWrap = document.getElementById('progressWrap');
+    const progressBar = document.getElementById('progressBar');
+    const countDisplay = document.getElementById('countDisplay');
+    
+    btn.disabled = true;
+    btn.innerText = 'Sedang mengimpor...';
+    progressWrap.style.display = 'block';
+    countDisplay.style.display = 'block';
+    document.getElementById('log').innerHTML = '';
+
+    log('=== MULAI PROSES IMPORT ===', 'info');
+    log(`Total produk yang akan diimpor: ${products.length}`, 'info');
+
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (let i = 0; i < products.length; i++) {
+        const prod = products[i];
+        try {
+            const docRef = await db.collection('products').add(prod);
+            log(`✅ [${i + 1}/${products.length}] Berhasil: ${prod.name} (ID: ${docRef.id})`, 'ok');
+            successCount++;
+        } catch (error) {
+            log(`❌ [${i + 1}/${products.length}] GAGAL: ${prod.name} - Error: ${error.message}`, 'err');
+            errorCount++;
+        }
+
+        // Update progress
+        const percent = Math.round(((i + 1) / products.length) * 100);
+        progressBar.style.width = percent + '%';
+        countDisplay.innerText = `${i + 1} / ${products.length} produk diproses`;
+    }
+
+    log('', 'info');
+    log(`=== SELESAI ===`, 'info');
+    log(`✅ Berhasil: ${successCount} produk`, 'ok');
+    if (errorCount > 0) log(`❌ Gagal: ${errorCount} produk`, 'err');
+    log('Silakan kembali ke halaman utama untuk melihat hasilnya.', 'info');
+
+    btn.innerText = successCount === products.length ? '✅ Import Selesai!' : '⚠️ Import Selesai (ada error)';
+    btn.style.background = successCount === products.length ? '#2e7d32' : '#f57c00';
+}
+
+async function clearProducts() {
+    if (!confirm('Hapus SEMUA produk dari Firestore? Tindakan ini tidak dapat dibatalkan.')) return;
+
+    document.getElementById('log').innerHTML = '';
+    log('=== MENGHAPUS SEMUA PRODUK ===', 'info');
+
+    try {
+        const querySnapshot = await db.collection('products').get();
+        let count = 0;
+        const deletePromises = [];
+
+        querySnapshot.forEach((doc) => {
+            deletePromises.push(db.collection('products').doc(doc.id).delete());
+            count++;
+        });
+
+        await Promise.all(deletePromises);
+        log(`✅ Berhasil menghapus ${count} produk dari Firestore.`, 'ok');
+        log('Sekarang klik "Import Semua Produk" untuk memuat ulang.', 'info');
+    } catch (err) {
+        log(`❌ Gagal menghapus: ${err.message}`, 'err');
+    }
+}
+</script>
+</body>
+</html>
