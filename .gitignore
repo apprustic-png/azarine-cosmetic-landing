@@ -1,0 +1,29 @@
+# Gitignore untuk Azarine Cosmetic Landing Page
+
+# ===== CREDENTIALS & ENVIRONMENT =====
+# File konfigurasi sensitif - JANGAN PERNAH di-commit!
+env-config.js
+.env
+.env.local
+.env.production
+*.json.bak
+
+# Firebase service account keys (SANGAT SENSITIF)
+*-firebase-adminsdk-*.json
+*-adminsdk-*.json
+service-account*.json
+google-services.json
+
+# ===== EDITOR & SYSTEM =====
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== LOGS =====
+*.log
+npm-debug.log*
+
+# ===== NODE (jika ada) =====
+node_modules/

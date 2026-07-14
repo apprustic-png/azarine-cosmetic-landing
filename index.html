@@ -4,26 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Azarine Cosmetic - Skincare Lokal Tropis Terbaik | BPOM & Halal</title>
-    <meta name="description" content="Dapatkan kulit sehat, cerah merata, dan bebas masalah jerawat dengan rangkaian skincare alami Azarine. Temukan Sunscreen, Serum, Moisturizer, dan Facial Wash terbaik.">
-    
-    <!-- Google Fonts -->
+    <meta name="description" content="Dapatkan kulit sehat, cerah merata, dan bebas masalah jerawat dengan rangkaian skincare alami Azarine. Analisis kulitmu gratis dengan Azarine AI.">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- CSS stylesheet -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <!-- Header / Navigation Bar -->
+    <!-- Navbar -->
     <header class="navbar">
         <div class="container">
-            <h1 class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">Azarine<span>.</span></h1>
+            <h1 class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">Azarine<span>.</span></h1>
             <nav>
                 <ul class="nav-links">
                     <li><a href="#home">Beranda</a></li>
                     <li><a href="#benefits">Mengapa Azarine</a></li>
-                    <li><a href="#products">Produk Unggulan</a></li>
-                    <li><a href="#leads">Hadiah Gratis</a></li>
+                    <li><a href="#products">Produk</a></li>
+                    <li><a href="#analyzer">AI Analyzer</a></li>
                     <li><a href="#reviews">Ulasan</a></li>
                     <li><a href="#faq">FAQ</a></li>
                 </ul>
@@ -34,22 +30,38 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- =========== HERO SECTION =========== -->
     <section id="home" class="hero">
         <div class="container hero-container">
             <div class="hero-text">
-                <span class="badge">#1 Best Skincare Lokal untuk Iklim Tropis 🇮🇩</span>
+                <span class="hero-badge">#1 Best Skincare Lokal untuk Iklim Tropis 🇮🇩</span>
                 <h2>Lindungi & Rawat Kulit Cantikmu dengan Kebaikan Alam! 🌿</h2>
                 <p>Dapatkan kulit sehat, cerah merata, dan bebas masalah jerawat dengan rangkaian skincare alami Azarine. Diformulasikan khusus tanpa bahan kimia berbahaya, 0% Alkohol, ramah untuk kulit sensitif, serta bersertifikasi BPOM & Halal MUI.</p>
                 <div class="hero-cta">
-                    <a href="#products" class="btn btn-primary">Lihat Produk Unggulan</a>
-                    <a href="#leads" class="btn btn-secondary">Dapatkan Voucher 10%</a>
+                    <a href="#analyzer" class="btn btn-primary">🤖 Analisis Kulit Gratis dengan AI</a>
+                    <a href="#products" class="btn btn-secondary">Lihat Produk Unggulan</a>
                 </div>
                 <div class="trust-badges">
                     <div class="badge-item"><span>✅</span> BPOM RI</div>
                     <div class="badge-item"><span>🕌</span> 100% Halal</div>
                     <div class="badge-item"><span>🧪</span> Dermatested</div>
                     <div class="badge-item"><span>🐰</span> Cruelty Free</div>
+                </div>
+            </div>
+            <div class="hero-image-wrap">
+                <div class="hero-image-glow"></div>
+                <img
+                    src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&q=85&w=700"
+                    alt="Wanita dengan kulit sehat menggunakan Azarine skincare"
+                    class="hero-img"
+                    onerror="this.src='https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?auto=format&fit=crop&q=80&w=700'"
+                >
+                <div class="hero-float-badge">
+                    <span>✨</span>
+                    <div>
+                        <strong>Azarine AI</strong>
+                        <span>Skin Analyzer</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,7 +71,7 @@
         </div>
     </section>
 
-    <!-- Benefit Section -->
+    <!-- =========== BENEFIT SECTION =========== -->
     <section id="benefits" class="benefits">
         <div class="container">
             <div class="section-header">
@@ -91,15 +103,13 @@
         </div>
     </section>
 
-    <!-- Product Showcase Section (Dynamic from Firestore/LocalStorage) -->
+    <!-- =========== PRODUCT SECTION =========== -->
     <section id="products" class="products">
         <div class="container">
             <div class="section-header">
                 <h2>Temukan Skincare Terbaik untuk Masalah Kulitmu</h2>
-                <p>Silakan klik kategori di bawah untuk menyaring produk yang sesuai dengan kebutuhan Anda:</p>
+                <p>Klik kategori di bawah untuk menyaring produk sesuai kebutuhan Anda:</p>
             </div>
-
-            <!-- Filter Controls -->
             <div class="filter-buttons">
                 <button class="filter-btn active" data-filter="all">Semua Produk</button>
                 <button class="filter-btn" data-filter="sunscreen">Sunscreen</button>
@@ -107,38 +117,190 @@
                 <button class="filter-btn" data-filter="moisturizer">Moisturizer</button>
                 <button class="filter-btn" data-filter="facialwash">Facial Wash</button>
             </div>
-
             <div class="product-grid" id="productGrid">
-                <!-- Memuat produk secara dinamis via JavaScript -->
                 <div class="loading-state">Sedang memuat katalog produk...</div>
             </div>
         </div>
     </section>
 
-    <!-- Lead Magnet Section -->
-    <section id="leads" class="leads-magnet">
-        <div class="container leads-container">
-            <div class="leads-card">
-                <div class="leads-text">
-                    <span class="magnet-badge">🎁 HADIAH SPESIAL</span>
-                    <h2>Dapatkan E-Book Panduan Kulit Glowing & Voucher Diskon 10%!</h2>
-                    <p>Masukkan nama dan email aktif Anda untuk mendapatkan panduan praktis perawatan kulit tropis langsung ke email Anda beserta voucher diskon 10% eksklusif untuk pembelanjaan pertama.</p>
-                </div>
-                <form id="leadForm" class="leads-form">
-                    <div class="input-group">
-                        <input type="text" id="leadName" placeholder="Nama Lengkap Anda" required>
-                    </div>
-                    <div class="input-group">
-                        <input type="email" id="leadEmail" placeholder="Email Aktif Anda" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Kirim E-Book & Voucher Saya!</button>
-                </form>
-                <div id="formFeedback" class="form-feedback"></div>
+    <!-- =========== AI SKIN ANALYZER SECTION =========== -->
+    <section id="analyzer" class="analyzer-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="ai-badge">🤖 Powered by Gemini AI</span>
+                <h2>Azarine AI Skin Analyzer</h2>
+                <p>Upload foto wajahmu dan dapatkan analisis kondisi kulit serta rekomendasi produk Azarine yang tepat — secara gratis!</p>
             </div>
+
+            <div class="analyzer-card">
+
+                <!-- STEP INDICATOR -->
+                <div class="step-indicator">
+                    <div class="step active" id="stepDot1">
+                        <div class="step-dot">1</div>
+                        <span>Upload Foto</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" id="stepDot2">
+                        <div class="step-dot">2</div>
+                        <span>Data Diri</span>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" id="stepDot3">
+                        <div class="step-dot">3</div>
+                        <span>Hasil Analisis</span>
+                    </div>
+                </div>
+
+                <!-- STEP 1: UPLOAD FOTO -->
+                <div id="analyzerStep1" class="analyzer-step active">
+                    <h3>📸 Langkah 1: Upload atau Ambil Foto Wajahmu</h3>
+                    <p class="step-desc">Pastikan wajahmu terlihat jelas, pencahayaan cukup, dan tidak menggunakan masker atau kacamata hitam.</p>
+
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('photoInput').click()">
+                        <div class="upload-icon">📷</div>
+                        <p><strong>Klik untuk upload foto</strong> atau seret ke sini</p>
+                        <p class="upload-hint">Format: JPG, PNG, WEBP • Maks. 5MB</p>
+                    </div>
+
+                    <div class="upload-actions">
+                        <label for="photoInput" class="btn btn-primary" style="display:inline-flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                            📁 Pilih dari Galeri
+                        </label>
+                        <label for="cameraInput" class="btn btn-secondary" style="display:inline-flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                            📷 Buka Kamera
+                        </label>
+                    </div>
+
+                    <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="handlePhotoSelect(this.files[0])">
+                    <input type="file" id="cameraInput" accept="image/*" capture="user" style="display:none;" onchange="handlePhotoSelect(this.files[0])">
+
+                    <div id="photoPreviewWrap" style="display:none; margin-top: 2rem; text-align:center;">
+                        <img id="photoPreview" src="" alt="Preview foto wajah" class="photo-preview">
+                        <p style="color: var(--primary-dark); font-weight: 600; margin-top: 1rem;">✅ Foto berhasil dipilih</p>
+                        <button class="btn btn-primary" onclick="goToStep2()" style="margin-top:1rem;">Lanjutkan ke Data Diri →</button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: FORM DATA DIRI -->
+                <div id="analyzerStep2" class="analyzer-step">
+                    <h3>📝 Langkah 2: Isi Data Dirimu</h3>
+                    <p class="step-desc">Data ini hanya digunakan untuk mengirimkan hasil analisis dan penawaran eksklusif kepadamu.</p>
+
+                    <form id="analyzerForm" class="analyzer-form" onsubmit="submitAnalysis(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="userName">Nama Lengkap <span style="color:red">*</span></label>
+                                <input type="text" id="userName" placeholder="Contoh: Siti Rahayu" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="userWA">No. WhatsApp <span style="color:red">*</span></label>
+                                <input type="tel" id="userWA" placeholder="Contoh: 081234567890" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="userEmail">Alamat Email <span style="color:red">*</span></label>
+                            <input type="email" id="userEmail" placeholder="Contoh: siti@email.com" required>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="agreeTerms" required>
+                            <label for="agreeTerms">Saya setuju data diri ini disimpan oleh Azarine Cosmetic dan bersedia menerima informasi promosi via WhatsApp/Email.</label>
+                        </div>
+
+                        <div class="selected-photo-preview">
+                            <img id="smallPreview" src="" alt="Foto yang dipilih">
+                            <span>Foto sudah siap untuk dianalisis</span>
+                        </div>
+
+                        <button type="submit" id="analyzeBtn" class="btn btn-primary btn-full">
+                            🔬 Analisis Kulitku Sekarang!
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="goToStep1()" style="width:100%; margin-top:0.8rem;">← Ganti Foto</button>
+                    </form>
+                </div>
+
+                <!-- STEP 3: LOADING STATE -->
+                <div id="analyzerLoading" class="analyzer-step">
+                    <div class="loading-analyzer">
+                        <div class="ai-pulse-ring"></div>
+                        <div class="loading-icon">🤖</div>
+                        <h3>AI sedang menganalisis kulitmu...</h3>
+                        <p>Gemini AI sedang memindai kondisi kulit, mengidentifikasi masalah, dan menyusun rekomendasi produk terbaik untukmu.</p>
+                        <div class="loading-steps-text">
+                            <div class="loading-step-item active" id="ls1">🔍 Mendeteksi wajah...</div>
+                            <div class="loading-step-item" id="ls2">🧬 Menganalisis kondisi kulit...</div>
+                            <div class="loading-step-item" id="ls3">💊 Menyusun rekomendasi produk...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: HASIL ANALISIS -->
+                <div id="analyzerResult" class="analyzer-step">
+                    <div class="result-header">
+                        <span class="result-badge">✨ Hasil Analisis Azarine AI</span>
+                        <h3 id="resultGreeting"></h3>
+                    </div>
+
+                    <div class="result-grid">
+                        <div class="result-card skin-type-card">
+                            <h4>🧬 Profil Kulitmu</h4>
+                            <div class="skin-stats">
+                                <div class="skin-stat">
+                                    <span class="stat-label">Jenis Kulit</span>
+                                    <span class="stat-value" id="resSkinType">—</span>
+                                </div>
+                                <div class="skin-stat">
+                                    <span class="stat-label">Tone Kulit</span>
+                                    <span class="stat-value" id="resSkinTone">—</span>
+                                </div>
+                                <div class="skin-stat">
+                                    <span class="stat-label">Hidrasi</span>
+                                    <span class="stat-value" id="resHydration">—</span>
+                                </div>
+                            </div>
+                            <div class="concerns-wrap">
+                                <span class="stat-label">Masalah Terdeteksi:</span>
+                                <div id="resConcerns" class="concerns-tags"></div>
+                            </div>
+                        </div>
+
+                        <div class="result-card analysis-card">
+                            <h4>📋 Analisis Detail</h4>
+                            <p id="resAnalysis"></p>
+                        </div>
+                    </div>
+
+                    <div class="result-products">
+                        <h4>🛍️ Rekomendasi Produk Azarine untuk Kulitmu</h4>
+                        <div id="resProducts" class="rec-products-grid"></div>
+                    </div>
+
+                    <div class="result-tips">
+                        <h4>💡 Tips Perawatan Kulit Untukmu</h4>
+                        <ul id="resTips"></ul>
+                    </div>
+
+                    <div class="result-cta">
+                        <a href="https://shopee.co.id/azarinecosmetic" target="_blank" class="btn btn-primary">🛒 Beli Produk Rekomendasi di Shopee</a>
+                        <button class="btn btn-secondary" onclick="resetAnalyzer()">🔄 Analisis Ulang</button>
+                    </div>
+                </div>
+
+                <!-- ERROR STATE -->
+                <div id="analyzerError" class="analyzer-step">
+                    <div class="error-state">
+                        <div class="error-icon">🚫</div>
+                        <h3 id="errorTitle">Terjadi Kesalahan</h3>
+                        <p id="errorMsg"></p>
+                        <button class="btn btn-primary" onclick="resetAnalyzer()" style="margin-top: 1.5rem;">Coba Lagi</button>
+                    </div>
+                </div>
+
+            </div><!-- end .analyzer-card -->
         </div>
     </section>
 
-    <!-- Social Proof / Reviews Section -->
+    <!-- =========== REVIEWS =========== -->
     <section id="reviews" class="reviews">
         <div class="container">
             <div class="section-header">
@@ -166,42 +328,45 @@
         </div>
     </section>
 
-    <!-- FAQ Section -->
+    <!-- =========== FAQ =========== -->
     <section id="faq" class="faq">
         <div class="container">
             <div class="section-header">
                 <h2>Pertanyaan yang Sering Diajukan (FAQ)</h2>
-                <p>Temukan jawaban cepat mengenai keamanan dan kenyamanan produk Azarine di bawah ini.</p>
+                <p>Temukan jawaban cepat mengenai keamanan dan kenyamanan produk Azarine.</p>
             </div>
             <div class="faq-list">
                 <div class="faq-item">
                     <h3 class="faq-question">Apakah produk Azarine aman untuk ibu hamil dan menyusui?</h3>
-                    <p class="faq-answer">Sebagian besar produk Azarine aman digunakan oleh ibu hamil dan menyusui karena diformulasikan dari bahan alami. Namun, untuk produk yang mengandung bahan aktif tinggi seperti retinol (Advanced Youth Barrier), kami sarankan Anda berkonsultasi terlebih dahulu dengan dokter kandungan.</p>
+                    <p class="faq-answer">Sebagian besar produk Azarine aman digunakan oleh ibu hamil dan menyusui karena diformulasikan dari bahan alami. Namun, untuk produk yang mengandung retinol, kami sarankan berkonsultasi terlebih dahulu dengan dokter kandungan.</p>
                 </div>
                 <div class="faq-item">
                     <h3 class="faq-question">Apakah produk Azarine sudah terdaftar BPOM dan bersertifikat Halal?</h3>
-                    <p class="faq-answer">Ya, seluruh rangkaian produk perawatan kulit Azarine telah diuji secara klinis, terdaftar resmi di BPOM RI, serta memiliki sertifikat 100% Halal resmi dari MUI Indonesia.</p>
+                    <p class="faq-answer">Ya, seluruh rangkaian produk Azarine telah terdaftar resmi di BPOM RI serta memiliki sertifikat 100% Halal dari MUI Indonesia.</p>
                 </div>
                 <div class="faq-item">
                     <h3 class="faq-question">Di mana saya bisa membeli produk Azarine yang dijamin original?</h3>
-                    <p class="faq-answer">Untuk jaminan keaslian 100%, belilah produk melalui toko resmi kami (Official Store) di Shopee Mall, Tokopedia Official Store, atau gerai ritel kesehatan fisik ternama seperti Watsons dan Guardian.</p>
+                    <p class="faq-answer">Untuk jaminan keaslian 100%, belilah melalui Official Store di Shopee Mall, Tokopedia Official Store, atau gerai Watsons dan Guardian.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Apakah fitur Azarine AI Skin Analyzer aman?</h3>
+                    <p class="faq-answer">Foto yang Anda upload hanya digunakan untuk keperluan analisis kulit dan tidak disimpan di server kami. Analisis dilakukan oleh Gemini AI dari Google dan hasilnya langsung ditampilkan kepada Anda.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer Section -->
+    <!-- =========== FOOTER =========== -->
     <footer class="footer">
         <div class="container">
             <div class="footer-cta">
                 <h2>Siap Dapatkan Kulit Impianmu Sekarang?</h2>
-                <p>Jangan tunda kesehatan kulitmu. Dapatkan penawaran promo gratis ongkir dan diskon menarik di official store kami hari ini.</p>
+                <p>Jangan tunda kesehatan kulitmu. Dapatkan promo gratis ongkir di official store kami.</p>
                 <div class="footer-buttons">
                     <a href="https://shopee.co.id/azarinecosmetic" target="_blank" class="btn btn-primary">Toko Resmi Shopee</a>
                     <a href="https://www.tokopedia.com/azarinecosmetic" target="_blank" class="btn btn-secondary">Toko Resmi Tokopedia</a>
                 </div>
             </div>
-            
             <div class="footer-info">
                 <div class="footer-col">
                     <h3>Kontak Kami</h3>
@@ -214,124 +379,314 @@
                     <p>Indonesia</p>
                 </div>
             </div>
-            
             <div class="footer-bottom">
-                <p>&copy; 2026 Azarine Cosmetic. All rights reserved. Created for SEO & High Conversion.</p>
+                <p>&copy; 2026 Azarine Cosmetic. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Firebase SDK Compat v11 & Config Initialization -->
+    <!-- Firebase SDK + Config -->
     <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
+    <script src="env-config.js"></script>
     <script src="firebase-config.js"></script>
 
-    <!-- Main Logic Script -->
+    <!-- Main Logic -->
     <script>
-        let currentFilter = 'all';
+    // ===== PRODUCT CATALOG =====
+    let currentFilter = 'all';
 
-        // Load Products from database (Firestore or LocalStorage Fallback)
-        function loadProducts() {
-            const grid = document.getElementById("productGrid");
-            grid.innerHTML = '<div class="loading-state">Sedang memuat katalog produk...</div>';
-
-            db.collection("products").get().then((querySnapshot) => {
-                grid.innerHTML = '';
-                let hasProducts = false;
-                
-                querySnapshot.forEach((doc) => {
-                    hasProducts = true;
-                    const product = doc.data();
-                    const pId = doc.id;
-                    
-                    // Buat elemen card produk
-                    const card = document.createElement("div");
-                    card.className = "product-card";
-                    card.setAttribute("data-category", product.category);
-                    card.style.display = (currentFilter === 'all' || product.category === currentFilter) ? 'flex' : 'none';
-
-                    card.innerHTML = `
-                        <div class="product-img-wrapper">
-                            <img src="${product.image || 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=400'}" alt="${product.name}" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=400'">
+    function loadProducts() {
+        const grid = document.getElementById("productGrid");
+        grid.innerHTML = '<div class="loading-state">Sedang memuat katalog produk...</div>';
+        db.collection("products").get().then(snapshot => {
+            grid.innerHTML = '';
+            let hasProducts = false;
+            snapshot.forEach(doc => {
+                hasProducts = true;
+                const p = doc.data();
+                const card = document.createElement("div");
+                card.className = "product-card";
+                card.setAttribute("data-category", p.category);
+                card.style.display = (currentFilter === 'all' || p.category === currentFilter) ? 'flex' : 'none';
+                card.innerHTML = `
+                    <div class="product-img-wrapper">
+                        <img src="${p.image || ''}" alt="${p.name}" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=400'">
+                    </div>
+                    <div class="product-body">
+                        <div class="product-header">
+                            <span class="category-tag">${p.category}</span>
+                            ${p.isBestSeller ? '<span class="bestseller-tag">Best Seller 🔥</span>' : ''}
                         </div>
-                        <div class="product-body">
-                            <div class="product-header">
-                                <span class="category-tag">${product.category}</span>
-                                ${product.isBestSeller ? '<span class="bestseller-tag">Best Seller 🔥</span>' : ''}
-                            </div>
-                            <h3>${product.name}</h3>
-                            <p class="desc">${product.desc}</p>
-                            <div class="ingredients"><strong>Kandungan:</strong> ${product.ingredients}</div>
-                        </div>
-                        <div class="price-action">
-                            <span class="price">${product.price}</span>
-                            <a href="${product.link || 'https://shopee.co.id/azarinecosmetic'}" target="_blank" class="btn btn-outline btn-sm">Beli Sekarang</a>
-                        </div>
-                    `;
-                    grid.appendChild(card);
-                });
-
-                if (!hasProducts) {
-                    grid.innerHTML = '<div class="no-products">Belum ada produk terdaftar. Hubungi admin untuk menambahkan produk.</div>';
-                }
-            }).catch((error) => {
-                console.error("Gagal mengambil data produk: ", error);
-                grid.innerHTML = '<div class="no-products">Terjadi kesalahan saat memuat katalog produk.</div>';
+                        <h3>${p.name}</h3>
+                        <p class="desc">${p.desc}</p>
+                        <div class="ingredients"><strong>Kandungan:</strong> ${p.ingredients}</div>
+                    </div>
+                    <div class="price-action">
+                        <span class="price">${p.price}</span>
+                        <a href="${p.link || 'https://shopee.co.id/azarinecosmetic'}" target="_blank" class="btn btn-outline btn-sm">Beli Sekarang</a>
+                    </div>`;
+                grid.appendChild(card);
             });
-        }
+            if (!hasProducts) grid.innerHTML = '<div class="no-products">Belum ada produk. Tambahkan lewat Admin Panel.</div>';
+        }).catch(() => {
+            grid.innerHTML = '<div class="no-products">Gagal memuat produk.</div>';
+        });
+    }
 
-        // Filter Category Function
-        function setupFiltering() {
-            const buttons = document.querySelectorAll('.filter-btn');
-            buttons.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    buttons.forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    currentFilter = e.target.getAttribute('data-filter');
-                    
-                    const cards = document.querySelectorAll('.product-card');
-                    cards.forEach(card => {
-                        const cat = card.getAttribute('data-category');
-                        if (currentFilter === 'all' || cat === currentFilter) {
-                            card.style.display = 'flex';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-                });
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentFilter = e.target.getAttribute('data-filter');
+            document.querySelectorAll('.product-card').forEach(card => {
+                const cat = card.getAttribute('data-category');
+                card.style.display = (currentFilter === 'all' || cat === currentFilter) ? 'flex' : 'none';
             });
+        });
+    });
+
+    // ===== SKIN ANALYZER =====
+    let selectedImageBase64 = null;
+    let selectedMimeType = 'image/jpeg';
+
+    function showAnalyzerStep(stepId) {
+        document.querySelectorAll('.analyzer-step').forEach(s => s.classList.remove('active'));
+        document.getElementById(stepId).classList.add('active');
+
+        // Update step indicator dots
+        const stepMap = { analyzerStep1: 1, analyzerStep2: 2, analyzerLoading: 3, analyzerResult: 3, analyzerError: 3 };
+        const activeStep = stepMap[stepId] || 1;
+        for (let i = 1; i <= 3; i++) {
+            const dot = document.getElementById('stepDot' + i);
+            if (dot) {
+                dot.classList.remove('active', 'completed');
+                if (i < activeStep) dot.classList.add('completed');
+                if (i === activeStep) dot.classList.add('active');
+            }
         }
+    }
 
-        // Submit Lead Form
-        document.getElementById("leadForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const name = document.getElementById("leadName").value;
-            const email = document.getElementById("leadEmail").value;
-            const feedback = document.getElementById("formFeedback");
-            
-            feedback.style.color = "var(--text-main)";
-            feedback.innerText = "Sedang mengirim data...";
+    function handlePhotoSelect(file) {
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Ukuran foto terlalu besar. Maksimal 5MB.');
+            return;
+        }
+        selectedMimeType = file.type || 'image/jpeg';
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const dataUrl = e.target.result;
+            selectedImageBase64 = dataUrl.split(',')[1]; // strip data:...;base64,
+            document.getElementById('photoPreview').src = dataUrl;
+            document.getElementById('photoPreviewWrap').style.display = 'block';
+            document.getElementById('uploadArea').style.display = 'none';
+            document.getElementById('smallPreview').src = dataUrl;
+        };
+        reader.readAsDataURL(file);
+    }
 
-            db.collection("leads").add({
-                name: name,
-                email: email,
+    function goToStep2() {
+        if (!selectedImageBase64) { alert('Silakan pilih foto terlebih dahulu.'); return; }
+        showAnalyzerStep('analyzerStep2');
+    }
+
+    function goToStep1() {
+        showAnalyzerStep('analyzerStep1');
+    }
+
+    function resetAnalyzer() {
+        selectedImageBase64 = null;
+        document.getElementById('photoPreviewWrap').style.display = 'none';
+        document.getElementById('uploadArea').style.display = 'flex';
+        document.getElementById('photoInput').value = '';
+        document.getElementById('cameraInput').value = '';
+        document.getElementById('analyzerForm').reset();
+        showAnalyzerStep('analyzerStep1');
+    }
+
+    // Animate loading steps
+    function animateLoadingSteps() {
+        const steps = ['ls1', 'ls2', 'ls3'];
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i > 0) document.getElementById(steps[i-1]).classList.remove('active');
+            if (i < steps.length) {
+                document.getElementById(steps[i]).classList.add('active');
+                i++;
+            } else {
+                clearInterval(interval);
+            }
+        }, 1800);
+        return interval;
+    }
+
+    async function submitAnalysis(e) {
+        e.preventDefault();
+        if (!selectedImageBase64) { alert('Silakan upload foto wajah terlebih dahulu.'); return; }
+
+        const name = document.getElementById('userName').value.trim();
+        const wa = document.getElementById('userWA').value.trim();
+        const email = document.getElementById('userEmail').value.trim();
+
+        // Show loading
+        showAnalyzerStep('analyzerLoading');
+        const loadingInterval = animateLoadingSteps();
+
+        // System prompt for Gemini
+        const systemPrompt = `Kamu adalah Azarine AI Skin Analyzer, asisten AI khusus analisis kondisi kulit wajah dan rekomendasi produk skincare Azarine.
+
+TUGAS UTAMA:
+1. Periksa apakah gambar yang diberikan adalah FOTO WAJAH MANUSIA
+2. Jika BUKAN foto wajah, balas HANYA dengan JSON berikut (tanpa teks lain):
+   {"is_face": false}
+3. Jika foto wajah, analisis dan balas dengan format JSON berikut (tanpa teks lain, tanpa markdown, tanpa kode block):
+
+{
+  "is_face": true,
+  "skin_type": "berminyak/kering/kombinasi/normal/sensitif",
+  "skin_concerns": ["masalah1", "masalah2"],
+  "skin_tone": "cerah/medium/sawo matang/gelap",
+  "hydration_level": "dehidrasi/cukup/terhidrasi baik",
+  "overall_condition": "Deskripsi kondisi kulit secara keseluruhan dalam 2 kalimat.",
+  "analysis_detail": "Analisis mendalam kondisi kulit dalam 3-4 kalimat. Jelaskan apa yang terlihat secara spesifik.",
+  "recommended_products": [
+    {"category": "sunscreen", "product_name": "nama produk", "reason": "alasan singkat"},
+    {"category": "serum", "product_name": "nama produk", "reason": "alasan singkat"},
+    {"category": "moisturizer", "product_name": "nama produk", "reason": "alasan singkat"},
+    {"category": "facialwash", "product_name": "nama produk", "reason": "alasan singkat"}
+  ],
+  "skincare_tips": ["tip 1", "tip 2", "tip 3"]
+}
+
+PRODUK AZARINE YANG TERSEDIA (rekomendasikan yang paling relevan):
+SUNSCREEN: Hydrasoothe Sunscreen Gel SPF 45 PA++++ (kulit berminyak/berjerawat/kombinasi), Hydramax-C Sunscreen Serum SPF 50 PA++++ (kulit kering/normal/glowing), Calm My Acne Sunscreen Moisturiser SPF 35 PA+++ (kulit berjerawat aktif), Cicamide Barrier Sunscreen Moisturiser SPF 35 PA+++ (kulit sensitif/skin barrier rusak)
+SERUM: Niacinamide 5% + Moisture Sepiwhite Serum (pencerah/bekas jerawat/meratakan warna), Acne Spot Serum (jerawat aktif meradang), Retinol Smooth Glowing Serum (anti-aging/tekstur kasar/kerutan), AHA-BHA-PHA Peeling Serum (bruntusan/pori tersumbat/eksfoliasi), Hydramax Water Bank Serum (dehidrasi/kulit kering)
+MOISTURIZER: Oil Free Brightening Daily Moisturizer (berminyak/kombinasi), Intense Luminous Barrier Moisturizer (kering/kusam), Pure Radiance Barrier Moisturizer (pori besar/sebum), Advanced Youth Barrier Moisturizer (anti-aging/kendur)
+FACIAL WASH: Acne Gentle Cleansing Foam (berjerawat/sensitif), Brightening Glow Facial Cleanser (kusam/warna tidak merata), Active Bright Brightening Creamy Foam (kering/normal butuh cerahkan)
+
+PENTING: Balas HANYA dengan JSON valid. Jangan tambahkan teks, penjelasan, atau markdown apapun di luar JSON. Gunakan Bahasa Indonesia yang ramah dan profesional untuk semua teks di dalam JSON.`;
+
+        try {
+            // Call Gemini 3.5 Flash API
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${ENV_CONFIG.GEMINI_API_KEY}`;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [
+                            { inline_data: { mime_type: selectedMimeType, data: selectedImageBase64 } },
+                            { text: systemPrompt }
+                        ]
+                    }],
+                    generation_config: { thinking_level: "low" }
+                })
+            });
+
+            clearInterval(loadingInterval);
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.error?.message || `HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+            const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+            // Parse JSON from response (strip any markdown code blocks if present)
+            let jsonStr = rawText.replace(/```json\n?/gi, '').replace(/```\n?/gi, '').trim();
+            const result = JSON.parse(jsonStr);
+
+            if (!result.is_face) {
+                // Bukan foto wajah
+                showAnalyzerStep('analyzerError');
+                document.getElementById('errorTitle').innerText = '❌ Bukan Foto Wajah';
+                document.getElementById('errorMsg').innerText = 'Foto yang Anda upload sepertinya bukan foto wajah manusia. Mohon upload foto wajah Anda yang jelas dengan pencahayaan yang baik untuk mendapatkan hasil analisis yang akurat.';
+                return;
+            }
+
+            // Save leads + analysis to Firestore
+            await db.collection("leads").add({
+                name, wa, email,
+                skin_type: result.skin_type || '',
+                skin_concerns: result.skin_concerns || [],
+                overall_condition: result.overall_condition || '',
+                recommended_products: (result.recommended_products || []).map(p => p.product_name).join(', '),
                 timestamp: new Date().toISOString()
-            }).then(() => {
-                feedback.style.color = "var(--primary-dark)";
-                feedback.innerText = "Success! E-Book dan voucher diskon 10% Anda telah dikirim ke " + email;
-                document.getElementById("leadForm").reset();
-            }).catch((error) => {
-                console.error("Error submitting lead: ", error);
-                feedback.style.color = "red";
-                feedback.innerText = "Gagal mengirim data. Silakan coba kembali nanti.";
             });
-        });
 
-        // Initialize Page
-        document.addEventListener("DOMContentLoaded", () => {
-            loadProducts();
-            setupFiltering();
-        });
+            // Render results
+            document.getElementById('resultGreeting').innerText = `Halo ${name}! 👋 Ini hasil analisis kulitmu:`;
+            document.getElementById('resSkinType').innerText = result.skin_type || '—';
+            document.getElementById('resSkinTone').innerText = result.skin_tone || '—';
+            document.getElementById('resHydration').innerText = result.hydration_level || '—';
+
+            // Concerns tags
+            const concernsEl = document.getElementById('resConcerns');
+            concernsEl.innerHTML = '';
+            (result.skin_concerns || []).forEach(c => {
+                const tag = document.createElement('span');
+                tag.className = 'concern-tag';
+                tag.innerText = c;
+                concernsEl.appendChild(tag);
+            });
+
+            // Analysis detail
+            document.getElementById('resAnalysis').innerText = result.analysis_detail || result.overall_condition || '';
+
+            // Recommended products
+            const prodEl = document.getElementById('resProducts');
+            prodEl.innerHTML = '';
+            (result.recommended_products || []).forEach(prod => {
+                const card = document.createElement('div');
+                card.className = 'rec-product-card';
+                card.innerHTML = `
+                    <div class="rec-cat-tag">${prod.category}</div>
+                    <h5>${prod.product_name}</h5>
+                    <p>${prod.reason}</p>
+                    <a href="https://shopee.co.id/azarinecosmetic" target="_blank" class="btn btn-outline btn-sm" style="margin-top: 0.8rem;">Beli di Shopee →</a>
+                `;
+                prodEl.appendChild(card);
+            });
+
+            // Tips
+            const tipsEl = document.getElementById('resTips');
+            tipsEl.innerHTML = '';
+            (result.skincare_tips || []).forEach(tip => {
+                const li = document.createElement('li');
+                li.innerText = tip;
+                tipsEl.appendChild(li);
+            });
+
+            showAnalyzerStep('analyzerResult');
+
+        } catch (err) {
+            clearInterval(loadingInterval);
+            console.error('Analyzer error:', err);
+            showAnalyzerStep('analyzerError');
+            document.getElementById('errorTitle').innerText = 'Gagal Menganalisis Foto';
+            document.getElementById('errorMsg').innerText = `Terjadi kesalahan saat menganalisis foto. Pesan error: ${err.message}. Pastikan koneksi internet Anda stabil dan coba lagi.`;
+        }
+    }
+
+    // Drag & drop support
+    const uploadArea = document.getElementById('uploadArea');
+    uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
+    uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+    uploadArea.addEventListener('drop', e => {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) handlePhotoSelect(file);
+    });
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+        loadProducts();
+        showAnalyzerStep('analyzerStep1');
+    });
     </script>
 </body>
 </html>
