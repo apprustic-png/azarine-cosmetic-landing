@@ -388,7 +388,6 @@
     <!-- Firebase SDK + Config -->
     <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
-    <script src="env-config.js"></script>
     <script src="firebase-config.js"></script>
 
     <!-- Main Logic -->
@@ -568,20 +567,14 @@ FACIAL WASH: Acne Gentle Cleansing Foam (berjerawat/sensitif), Brightening Glow 
 PENTING: Balas HANYA dengan JSON valid. Jangan tambahkan teks, penjelasan, atau markdown apapun di luar JSON. Gunakan Bahasa Indonesia yang ramah dan profesional untuk semua teks di dalam JSON.`;
 
         try {
-            // Call Gemini 3.5 Flash API
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${ENV_CONFIG.GEMINI_API_KEY}`;
-
-            const response = await fetch(apiUrl, {
+            // Call Gemini via Vercel Serverless Function (key aman di server)
+            const response = await fetch('/api/analyze', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    contents: [{
-                        parts: [
-                            { inline_data: { mime_type: selectedMimeType, data: selectedImageBase64 } },
-                            { text: systemPrompt }
-                        ]
-                    }],
-                    generation_config: { thinking_level: "low" }
+                    mimeType: selectedMimeType,
+                    imageBase64: selectedImageBase64,
+                    prompt: systemPrompt
                 })
             });
 

@@ -1,18 +1,18 @@
 /**
  * firebase-config.js
- * Inisialisasi Firebase menggunakan nilai dari ENV_CONFIG (env-config.js).
- * env-config.js TIDAK di-commit ke GitHub.
+ * Inisialisasi Firebase. Konfigurasi web Firebase (apiKey, dll.) memang bersifat
+ * publik dan aman untuk berada di kode client — keamanan dijaga oleh Firestore Rules,
+ * bukan dengan menyembunyikan nilai ini. Karena itu di-hardcode langsung agar
+ * ikut ter-deploy ke Vercel (tidak lagi bergantung pada env-config.js yang gitignored).
  */
-
-// Pastikan ENV_CONFIG sudah dimuat sebelum file ini (via <script src="env-config.js">)
 const firebaseConfig = {
-    apiKey: ENV_CONFIG.FIREBASE_API_KEY,
-    authDomain: ENV_CONFIG.FIREBASE_AUTH_DOMAIN,
-    projectId: ENV_CONFIG.FIREBASE_PROJECT_ID,
-    storageBucket: ENV_CONFIG.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: ENV_CONFIG.FIREBASE_MESSAGING_SENDER_ID,
-    appId: ENV_CONFIG.FIREBASE_APP_ID,
-    measurementId: ENV_CONFIG.FIREBASE_MEASUREMENT_ID
+    apiKey: "AIzaSyCSRv9FngUUknBEiIFPZEKdJe8qSwBWngc",
+    authDomain: "azarine-25eec.firebaseapp.com",
+    projectId: "azarine-25eec",
+    storageBucket: "azarine-25eec.firebasestorage.app",
+    messagingSenderId: "1023045938940",
+    appId: "1:1023045938940:web:9ac2a22a07842a39acb179",
+    measurementId: "G-VD2K8HE0XY"
 };
 
 let db = null;
