@@ -178,7 +178,29 @@
                     <div id="photoPreviewWrap" style="display:none; margin-top: 2rem; text-align:center;">
                         <img id="photoPreview" src="" alt="Preview foto wajah" class="photo-preview">
                         <p style="color: var(--primary-dark); font-weight: 600; margin-top: 1rem;">✅ Foto berhasil dipilih</p>
-                        <button class="btn btn-primary" onclick="goToStep2()" style="margin-top:1rem;">Lanjutkan ke Data Diri →</button>
+                        <button class="btn btn-primary" onclick="startFaceScan()" style="margin-top:1rem;">Deteksi Wajah →</button>
+                    </div>
+                </div>
+
+                <!-- STEP 1.5: FACE SCAN (facial recognition) -->
+                <div id="analyzerScan" class="analyzer-step">
+                    <h3>🧠 Mendeteksi Wajah...</h3>
+                    <p class="step-desc">Teknologi facial recognition sedang memetakan titik-titik wajahmu.</p>
+                    <div class="scan-wrap">
+                        <img id="scanImg" src="" alt="Pemindaian wajah" class="scan-img">
+                        <div class="scan-overlay" id="scanOverlay">
+                            <div class="scan-frame"><i></i><i></i><i></i><i></i></div>
+                            <div class="scan-line"></div>
+                        </div>
+                    </div>
+                    <div class="scan-status">
+                        <div class="scan-check" id="sc1">📍 Memetakan struktur wajah...</div>
+                        <div class="scan-check" id="sc2">🧬 Menganalisis tekstur permukaan kulit...</div>
+                        <div class="scan-check" id="sc3">🎯 Mendeteksi area yang perlu perhatian...</div>
+                    </div>
+                    <div id="scanDone" style="display:none; text-align:center; margin-top:1.5rem;">
+                        <div class="scan-success">✅ Wajah Terdeteksi!</div>
+                        <button class="btn btn-primary" onclick="showAnalyzerStep('analyzerStep2')" style="margin-top:1rem;">Lanjut Isi Data →</button>
                     </div>
                 </div>
 
@@ -267,6 +289,24 @@
                         <div class="result-card analysis-card">
                             <h4>📋 Analisis Detail</h4>
                             <p id="resAnalysis"></p>
+                        </div>
+                    </div>
+
+                    <!-- SKIN HEALTH SCORES / CHARTS -->
+                    <div class="result-scores">
+                        <h4>📊 Skor Kesehatan Kulitmu</h4>
+                        <div class="scores-layout">
+                            <div class="overall-ring">
+                                <svg viewBox="0 0 120 120" class="ring-svg">
+                                    <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+                                    <circle class="ring-fg" id="ringFg" cx="60" cy="60" r="52"></circle>
+                                </svg>
+                                <div class="overall-ring-label">
+                                    <span id="overallScore">0</span><small>/100</small>
+                                    <em id="overallGrade"></em>
+                                </div>
+                            </div>
+                            <div class="score-bars" id="scoreBars"></div>
                         </div>
                     </div>
 
@@ -394,16 +434,23 @@
     <script>
     // ===== PRODUCT CATALOG =====
     let currentFilter = 'all';
+    let productCatalog = []; // dipakai untuk mencocokkan rekomendasi AI -> gambar produk
 
     function loadProducts() {
         const grid = document.getElementById("productGrid");
         grid.innerHTML = '<div class="loading-state">Sedang memuat katalog produk...</div>';
         db.collection("products").get().then(snapshot => {
             grid.innerHTML = '';
+            productCatalog = [];
             let hasProducts = false;
             snapshot.forEach(doc => {
                 hasProducts = true;
                 const p = doc.data();
+                productCatalog.push({
+                    name: p.name || '', category: p.category || '', image: p.image || '',
+                    price: p.price || '', link: p.link || 'https://shopee.co.id/azarinecosmetic',
+                    desc: p.desc || ''
+                });
                 const card = document.createElement("div");
                 card.className = "product-card";
                 card.setAttribute("data-category", p.category);
@@ -490,6 +537,43 @@
         showAnalyzerStep('analyzerStep2');
     }
 
+    // Facial recognition "theater": animasi deteksi wajah sebelum isi data.
+    // Validasi wajah yang sebenarnya tetap dilakukan oleh AI saat analisis (is_face).
+    let scanTimers = [];
+    function startFaceScan() {
+        if (!selectedImageBase64) { alert('Silakan pilih foto terlebih dahulu.'); return; }
+        // reset state
+        scanTimers.forEach(clearTimeout); scanTimers = [];
+        ['sc1', 'sc2', 'sc3'].forEach(id => document.getElementById(id).classList.remove('done'));
+        document.getElementById('scanDone').style.display = 'none';
+        document.getElementById('scanOverlay').style.display = 'block';
+        document.getElementById('scanImg').src = document.getElementById('photoPreview').src;
+        showAnalyzerStep('analyzerScan');
+
+        // munculkan centang bertahap
+        scanTimers.push(setTimeout(() => document.getElementById('sc1').classList.add('done'), 1100));
+        scanTimers.push(setTimeout(() => document.getElementById('sc2').classList.add('done'), 2300));
+        scanTimers.push(setTimeout(() => document.getElementById('sc3').classList.add('done'), 3400));
+        scanTimers.push(setTimeout(() => {
+            document.getElementById('scanOverlay').style.display = 'none';
+            document.getElementById('scanDone').style.display = 'block';
+        }, 4000));
+    }
+
+    // Cocokkan nama produk rekomendasi AI dengan katalog Firestore (untuk ambil gambar/harga/link)
+    function findCatalogProduct(name, category) {
+        if (!name) return null;
+        const norm = s => (s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+        const target = norm(name);
+        let best = productCatalog.find(p => norm(p.name) === target);
+        if (best) return best;
+        // pencocokan longgar: nama katalog terkandung / mengandung
+        best = productCatalog.find(p => norm(p.name).includes(target) || target.includes(norm(p.name)));
+        if (best) return best;
+        // fallback: produk pertama pada kategori yang sama
+        return productCatalog.find(p => norm(p.category) === norm(category)) || null;
+    }
+
     function goToStep1() {
         showAnalyzerStep('analyzerStep1');
     }
@@ -520,6 +604,66 @@
         return interval;
     }
 
+    // Render grafik skor kesehatan kulit (ring keseluruhan + bar per metrik)
+    const SCORE_META = [
+        { key: 'hydration', label: '💧 Hidrasi' },
+        { key: 'oil_control', label: '🧴 Kontrol Minyak' },
+        { key: 'acne_clarity', label: '✨ Bebas Jerawat' },
+        { key: 'pore_refinement', label: '🔬 Kerapatan Pori' },
+        { key: 'texture_smoothness', label: '🪷 Kehalusan Tekstur' },
+        { key: 'even_tone', label: '🎨 Kerataan Warna' },
+        { key: 'firmness', label: '💪 Kekencangan' }
+    ];
+    function scoreColor(v) {
+        if (v >= 75) return '#558b2f';   // hijau - baik
+        if (v >= 50) return '#ffb300';   // kuning - sedang
+        return '#e53935';                // merah - perlu perhatian
+    }
+    function renderScores(scores, overall) {
+        const vals = SCORE_META.map(m => Math.max(0, Math.min(100, Number(scores[m.key]) || 0)));
+        if (typeof overall !== 'number' || isNaN(overall)) {
+            overall = Math.round(vals.reduce((a, b) => a + b, 0) / (vals.length || 1));
+        }
+        overall = Math.max(0, Math.min(100, Math.round(overall)));
+
+        // Ring keseluruhan
+        const R = 52, C = 2 * Math.PI * R;
+        const ring = document.getElementById('ringFg');
+        ring.style.strokeDasharray = C;
+        ring.style.strokeDashoffset = C;
+        ring.style.stroke = scoreColor(overall);
+        const grade = overall >= 80 ? 'Sangat Baik' : overall >= 65 ? 'Baik' : overall >= 50 ? 'Cukup' : 'Perlu Perawatan';
+        document.getElementById('overallGrade').innerText = grade;
+
+        // Bar per metrik
+        const wrap = document.getElementById('scoreBars');
+        wrap.innerHTML = '';
+        SCORE_META.forEach((m, i) => {
+            const v = vals[i];
+            const row = document.createElement('div');
+            row.className = 'score-row';
+            row.innerHTML = `
+                <div class="score-row-top"><span>${m.label}</span><b>${v}</b></div>
+                <div class="score-track"><div class="score-fill" style="background:${scoreColor(v)}"></div></div>
+            `;
+            wrap.appendChild(row);
+            // animasikan lebar bar
+            const fill = row.querySelector('.score-fill');
+            setTimeout(() => { fill.style.width = v + '%'; }, 100 + i * 90);
+        });
+
+        // Animasikan ring + angka
+        let cur = 0;
+        const step = Math.max(1, Math.round(overall / 40));
+        const numEl = document.getElementById('overallScore');
+        const anim = setInterval(() => {
+            cur = Math.min(overall, cur + step);
+            numEl.innerText = cur;
+            ring.style.strokeDashoffset = C - (C * cur / 100);
+            if (cur >= overall) clearInterval(anim);
+        }, 25);
+    }
+
     async function submitAnalysis(e) {
         e.preventDefault();
         if (!selectedImageBase64) { alert('Silakan upload foto wajah terlebih dahulu.'); return; }
@@ -547,6 +691,16 @@ TUGAS UTAMA:
   "skin_concerns": ["masalah1", "masalah2"],
   "skin_tone": "cerah/medium/sawo matang/gelap",
   "hydration_level": "dehidrasi/cukup/terhidrasi baik",
+  "scores": {
+    "hydration": 0-100,
+    "oil_control": 0-100,
+    "acne_clarity": 0-100,
+    "pore_refinement": 0-100,
+    "texture_smoothness": 0-100,
+    "even_tone": 0-100,
+    "firmness": 0-100
+  },
+  "overall_score": 0-100,
   "overall_condition": "Deskripsi kondisi kulit secara keseluruhan dalam 2 kalimat.",
   "analysis_detail": "Analisis mendalam kondisi kulit dalam 3-4 kalimat. Jelaskan apa yang terlihat secara spesifik.",
   "recommended_products": [
@@ -563,6 +717,8 @@ SUNSCREEN: Hydrasoothe Sunscreen Gel SPF 45 PA++++ (kulit berminyak/berjerawat/k
 SERUM: Niacinamide 5% + Moisture Sepiwhite Serum (pencerah/bekas jerawat/meratakan warna), Acne Spot Serum (jerawat aktif meradang), Retinol Smooth Glowing Serum (anti-aging/tekstur kasar/kerutan), AHA-BHA-PHA Peeling Serum (bruntusan/pori tersumbat/eksfoliasi), Hydramax Water Bank Serum (dehidrasi/kulit kering)
 MOISTURIZER: Oil Free Brightening Daily Moisturizer (berminyak/kombinasi), Intense Luminous Barrier Moisturizer (kering/kusam), Pure Radiance Barrier Moisturizer (pori besar/sebum), Advanced Youth Barrier Moisturizer (anti-aging/kendur)
 FACIAL WASH: Acne Gentle Cleansing Foam (berjerawat/sensitif), Brightening Glow Facial Cleanser (kusam/warna tidak merata), Active Bright Brightening Creamy Foam (kering/normal butuh cerahkan)
+
+PANDUAN SKOR: Setiap nilai pada "scores" berkisar 0-100 di mana 100 = kondisi ideal/paling sehat (mis. acne_clarity tinggi = kulit bersih dari jerawat, oil_control tinggi = minyak terkendali). "overall_score" mencerminkan kondisi kulit secara keseluruhan. Berikan nilai yang realistis, spesifik, dan bervariasi sesuai kondisi nyata pada foto — jangan menyamaratakan semua ke satu angka.
 
 PENTING: Balas HANYA dengan JSON valid. Jangan tambahkan teks, penjelasan, atau markdown apapun di luar JSON. Gunakan Bahasa Indonesia yang ramah dan profesional untuk semua teks di dalam JSON.`;
 
@@ -600,13 +756,20 @@ PENTING: Balas HANYA dengan JSON valid. Jangan tambahkan teks, penjelasan, atau 
                 return;
             }
 
-            // Save leads + analysis to Firestore
+            // Simpan lead + hasil analisis lengkap ke Firestore (tampil di Admin Panel)
             await db.collection("leads").add({
                 name, wa, email,
                 skin_type: result.skin_type || '',
+                skin_tone: result.skin_tone || '',
+                hydration_level: result.hydration_level || '',
                 skin_concerns: result.skin_concerns || [],
+                scores: result.scores || {},
+                overall_score: typeof result.overall_score === 'number' ? result.overall_score : null,
                 overall_condition: result.overall_condition || '',
+                analysis_detail: result.analysis_detail || '',
                 recommended_products: (result.recommended_products || []).map(p => p.product_name).join(', '),
+                recommended_detail: result.recommended_products || [],
+                skincare_tips: result.skincare_tips || [],
                 timestamp: new Date().toISOString()
             });
 
@@ -629,17 +792,31 @@ PENTING: Balas HANYA dengan JSON valid. Jangan tambahkan teks, penjelasan, atau 
             // Analysis detail
             document.getElementById('resAnalysis').innerText = result.analysis_detail || result.overall_condition || '';
 
-            // Recommended products
+            // Skor kesehatan kulit (grafik)
+            renderScores(result.scores || {}, result.overall_score);
+
+            // Recommended products (dengan gambar dari katalog)
             const prodEl = document.getElementById('resProducts');
             prodEl.innerHTML = '';
+            const fallbackImg = 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=400';
             (result.recommended_products || []).forEach(prod => {
+                const match = findCatalogProduct(prod.product_name, prod.category);
+                const img = (match && match.image) ? match.image : fallbackImg;
+                const price = match && match.price ? `<span class="rec-price">${match.price}</span>` : '';
+                const link = (match && match.link) || 'https://shopee.co.id/azarinecosmetic';
                 const card = document.createElement('div');
                 card.className = 'rec-product-card';
                 card.innerHTML = `
-                    <div class="rec-cat-tag">${prod.category}</div>
-                    <h5>${prod.product_name}</h5>
-                    <p>${prod.reason}</p>
-                    <a href="https://shopee.co.id/azarinecosmetic" target="_blank" class="btn btn-outline btn-sm" style="margin-top: 0.8rem;">Beli di Shopee →</a>
+                    <div class="rec-img-wrap">
+                        <img src="${img}" alt="${prod.product_name}" class="rec-img" onerror="this.src='${fallbackImg}'">
+                    </div>
+                    <div class="rec-body">
+                        <div class="rec-cat-tag">${prod.category}</div>
+                        <h5>${prod.product_name}</h5>
+                        <p>${prod.reason}</p>
+                        ${price}
+                        <a href="${link}" target="_blank" class="btn btn-outline btn-sm" style="margin-top: 0.8rem;">Beli Sekarang →</a>
+                    </div>
                 `;
                 prodEl.appendChild(card);
             });

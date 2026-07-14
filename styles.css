@@ -239,3 +239,70 @@ body { font-family: var(--font-stack); color: var(--text-main); background: var(
     .analyzer-card { padding: 2rem; }
     .result-cta { flex-direction: column; }
 }
+
+/* ===================== FACE SCAN (facial recognition) ===================== */
+.scan-wrap {
+    position: relative; max-width: 340px; margin: 1.5rem auto 0;
+    border-radius: 18px; overflow: hidden; box-shadow: var(--card-shadow);
+    background: #0b1a0b;
+}
+.scan-img { display: block; width: 100%; height: auto; filter: saturate(1.05) contrast(1.03); }
+.scan-overlay { position: absolute; inset: 0; }
+.scan-frame { position: absolute; inset: 12%; }
+.scan-frame i {
+    position: absolute; width: 26px; height: 26px; border: 3px solid var(--secondary-light);
+    filter: drop-shadow(0 0 4px rgba(255,229,76,0.8));
+}
+.scan-frame i:nth-child(1){ top:0; left:0; border-right:0; border-bottom:0; }
+.scan-frame i:nth-child(2){ top:0; right:0; border-left:0; border-bottom:0; }
+.scan-frame i:nth-child(3){ bottom:0; left:0; border-right:0; border-top:0; }
+.scan-frame i:nth-child(4){ bottom:0; right:0; border-left:0; border-top:0; }
+.scan-line {
+    position: absolute; left: 6%; right: 6%; height: 3px; top: 10%;
+    background: linear-gradient(90deg, transparent, var(--primary-light), var(--secondary), var(--primary-light), transparent);
+    box-shadow: 0 0 14px 3px rgba(133,187,92,0.7);
+    animation: scanMove 1.6s ease-in-out infinite;
+}
+@keyframes scanMove { 0%{ top:8%; } 50%{ top:88%; } 100%{ top:8%; } }
+.scan-status { max-width: 340px; margin: 1.2rem auto 0; display: flex; flex-direction: column; gap: 0.5rem; }
+.scan-check {
+    font-size: 0.92rem; color: var(--text-muted); opacity: 0.55;
+    transition: var(--transition); padding-left: 1.6rem; position: relative;
+}
+.scan-check::before { content: '⏳'; position: absolute; left: 0; }
+.scan-check.done { opacity: 1; color: var(--primary-dark); font-weight: 600; }
+.scan-check.done::before { content: '✅'; }
+.scan-success {
+    font-size: 1.3rem; font-weight: 800; color: var(--primary-dark);
+    animation: popIn 0.4s cubic-bezier(0.18,0.89,0.32,1.28);
+}
+@keyframes popIn { from{ transform: scale(0.6); opacity: 0; } to{ transform: scale(1); opacity: 1; } }
+
+/* ===================== SKIN HEALTH SCORES / CHARTS ===================== */
+.result-scores { margin-top: 2rem; }
+.result-scores h4 { margin-bottom: 1.2rem; }
+.scores-layout { display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
+.overall-ring { position: relative; width: 150px; height: 150px; flex: 0 0 auto; margin: 0 auto; }
+.ring-svg { width: 150px; height: 150px; transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: #e8f0e0; stroke-width: 10; }
+.ring-fg { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 0.05s linear; }
+.overall-ring-label {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+}
+.overall-ring-label span { font-size: 2.2rem; font-weight: 800; color: var(--text-main); line-height: 1; }
+.overall-ring-label small { color: var(--text-muted); font-size: 0.8rem; }
+.overall-ring-label em { font-style: normal; font-weight: 700; font-size: 0.75rem; color: var(--primary-dark); margin-top: 0.2rem; }
+.score-bars { flex: 1 1 300px; display: flex; flex-direction: column; gap: 0.7rem; min-width: 260px; }
+.score-row-top { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.25rem; }
+.score-row-top b { font-variant-numeric: tabular-nums; }
+.score-track { height: 9px; background: #eef3e8; border-radius: 6px; overflow: hidden; }
+.score-fill { height: 100%; width: 0; border-radius: 6px; transition: width 0.9s cubic-bezier(0.25,0.8,0.25,1); }
+
+/* Rekomendasi produk dengan gambar */
+.rec-product-card { display: flex; flex-direction: column; overflow: hidden; padding: 0; }
+.rec-img-wrap { width: 100%; aspect-ratio: 4/3; overflow: hidden; background: var(--bg-light); }
+.rec-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rec-body { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; flex: 1; }
+.rec-price { font-weight: 800; color: var(--primary-dark); margin-top: 0.4rem; }
+@media (max-width: 600px) { .scores-layout { flex-direction: column; } }

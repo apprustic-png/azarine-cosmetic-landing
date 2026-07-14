@@ -288,8 +288,10 @@
                             <thead>
                                 <tr>
                                     <th>Nama</th>
-                                    <th>Email</th>
-                                    <th>Waktu Registrasi</th>
+                                    <th>Kontak</th>
+                                    <th>Jenis Kulit</th>
+                                    <th>Skor</th>
+                                    <th>Waktu</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -303,6 +305,27 @@
 
         </div>
     </div>
+
+    <!-- MODAL DETAIL HASIL ANALISIS -->
+    <div id="leadDetailModal" class="ld-modal" onclick="if(event.target===this)closeLeadDetail()">
+        <div class="ld-modal-card">
+            <button class="ld-close" onclick="closeLeadDetail()">&times;</button>
+            <div id="leadDetailBody"></div>
+        </div>
+    </div>
+    <style>
+        .ld-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:flex-start; justify-content:center; padding:2rem 1rem; overflow:auto; }
+        .ld-modal-card { background:#fff; border-radius:16px; max-width:640px; width:100%; padding:2rem; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.25); }
+        .ld-close { position:absolute; top:12px; right:16px; background:none; border:none; font-size:1.8rem; cursor:pointer; color:#888; line-height:1; }
+        .ld-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; background:#f5f7f2; padding:0.9rem 1rem; border-radius:10px; font-size:0.92rem; }
+        .ld-tag { display:inline-block; background:#e8f0e0; color:#255d00; padding:0.2rem 0.7rem; border-radius:20px; font-size:0.82rem; margin:0.15rem 0.15rem 0 0; }
+        .ld-scores { display:flex; flex-direction:column; gap:0.45rem; }
+        .ld-score { display:grid; grid-template-columns:130px 1fr 34px; align-items:center; gap:0.6rem; font-size:0.85rem; }
+        .ld-bar { height:8px; background:#eef3e8; border-radius:5px; overflow:hidden; }
+        .ld-bar i { display:block; height:100%; background:#558b2f; border-radius:5px; }
+        .ld-score b { text-align:right; font-variant-numeric:tabular-nums; }
+        @media(max-width:520px){ .ld-grid{grid-template-columns:1fr;} .ld-score{grid-template-columns:100px 1fr 30px;} }
+    </style>
 
     <!-- Firebase SDK Compat v11 & Config -->
     <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
@@ -442,26 +465,34 @@
         }
 
         // Load Leads Form Submissions
+        let leadsCache = {};
         function loadAdminLeads() {
             const tableBody = document.getElementById("leadsTableBody");
-            tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Memuat data prospek...</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Memuat data prospek...</td></tr>';
 
             db.collection("leads").get().then((querySnapshot) => {
                 tableBody.innerHTML = '';
+                leadsCache = {};
                 let hasLeads = false;
 
                 querySnapshot.forEach((doc) => {
                     hasLeads = true;
                     const lead = doc.data();
                     const leadId = doc.id;
-                    const formattedDate = new Date(lead.timestamp).toLocaleString("id-ID");
+                    leadsCache[leadId] = lead;
+                    const formattedDate = lead.timestamp ? new Date(lead.timestamp).toLocaleString("id-ID") : '-';
+                    const score = (typeof lead.overall_score === 'number') ? lead.overall_score : '-';
+                    const wa = lead.wa ? `<a href="https://wa.me/${String(lead.wa).replace(/[^0-9]/g,'').replace(/^0/,'62')}" target="_blank">${lead.wa}</a>` : '';
 
                     const tr = document.createElement("tr");
                     tr.innerHTML = `
-                        <td>${lead.name}</td>
-                        <td><a href="mailto:${lead.email}">${lead.email}</a></td>
+                        <td>${lead.name || '-'}</td>
+                        <td><a href="mailto:${lead.email}">${lead.email || '-'}</a><br>${wa}</td>
+                        <td>${lead.skin_type || '-'}</td>
+                        <td><strong>${score}</strong>${score !== '-' ? '/100' : ''}</td>
                         <td>${formattedDate}</td>
-                        <td>
+                        <td style="white-space:nowrap;">
+                            <button onclick="showLeadDetail('${leadId}')" class="btn btn-sm" style="background:var(--primary,#558b2f);color:#fff;">Detail</button>
                             <button onclick="deleteLead('${leadId}')" class="btn btn-danger btn-sm">Hapus</button>
                         </td>
                     `;
@@ -469,13 +500,57 @@
                 });
 
                 if (!hasLeads) {
-                    tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Belum ada prospek/leads terdaftar.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Belum ada prospek/leads terdaftar.</td></tr>';
                 }
             }).catch(err => {
                 console.error(err);
-                tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: red;">Gagal memuat data leads.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">Gagal memuat data leads.</td></tr>';
             });
         }
+
+        // Tampilkan detail hasil analisis dalam modal
+        function showLeadDetail(leadId) {
+            const lead = leadsCache[leadId];
+            if (!lead) return;
+            const esc = s => String(s == null ? '' : s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+            const concerns = (lead.skin_concerns || []).map(c => `<span class="ld-tag">${esc(c)}</span>`).join(' ') || '-';
+            const scores = lead.scores || {};
+            const scoreLabels = {
+                hydration:'Hidrasi', oil_control:'Kontrol Minyak', acne_clarity:'Bebas Jerawat',
+                pore_refinement:'Kerapatan Pori', texture_smoothness:'Kehalusan Tekstur',
+                even_tone:'Kerataan Warna', firmness:'Kekencangan'
+            };
+            const scoreRows = Object.keys(scoreLabels).map(k => {
+                const v = Number(scores[k]) || 0;
+                return `<div class="ld-score"><span>${scoreLabels[k]}</span><div class="ld-bar"><i style="width:${v}%"></i></div><b>${v}</b></div>`;
+            }).join('');
+            const recs = (lead.recommended_detail && lead.recommended_detail.length
+                ? lead.recommended_detail.map(p => `<li><strong>${esc(p.category)}:</strong> ${esc(p.product_name)} — <em>${esc(p.reason)}</em></li>`).join('')
+                : (lead.recommended_products ? `<li>${esc(lead.recommended_products)}</li>` : '<li>-</li>'));
+            const tips = (lead.skincare_tips || []).map(t => `<li>${esc(t)}</li>`).join('') || '<li>-</li>';
+
+            document.getElementById('leadDetailBody').innerHTML = `
+                <h3 style="margin-top:0;">${esc(lead.name)} <span style="font-weight:400;font-size:0.85rem;color:#888;">• ${lead.timestamp ? new Date(lead.timestamp).toLocaleString('id-ID') : ''}</span></h3>
+                <p style="margin:0 0 1rem;">📧 ${esc(lead.email)} &nbsp; 📱 ${esc(lead.wa)}</p>
+                <div class="ld-grid">
+                    <div><strong>Jenis Kulit:</strong> ${esc(lead.skin_type) || '-'}</div>
+                    <div><strong>Tone:</strong> ${esc(lead.skin_tone) || '-'}</div>
+                    <div><strong>Hidrasi:</strong> ${esc(lead.hydration_level) || '-'}</div>
+                    <div><strong>Skor Total:</strong> ${typeof lead.overall_score==='number'?lead.overall_score+'/100':'-'}</div>
+                </div>
+                <p style="margin:0.8rem 0 0.3rem;"><strong>Masalah Terdeteksi:</strong></p><div>${concerns}</div>
+                <p style="margin:1rem 0 0.4rem;"><strong>📊 Skor Kesehatan Kulit:</strong></p>
+                <div class="ld-scores">${scoreRows}</div>
+                <p style="margin:1rem 0 0.3rem;"><strong>📋 Analisis:</strong></p>
+                <p style="margin:0;">${esc(lead.analysis_detail || lead.overall_condition)}</p>
+                <p style="margin:1rem 0 0.3rem;"><strong>🛍️ Rekomendasi Produk:</strong></p>
+                <ul style="margin:0;padding-left:1.2rem;">${recs}</ul>
+                <p style="margin:1rem 0 0.3rem;"><strong>💡 Tips:</strong></p>
+                <ul style="margin:0;padding-left:1.2rem;">${tips}</ul>
+            `;
+            document.getElementById('leadDetailModal').style.display = 'flex';
+        }
+        function closeLeadDetail() { document.getElementById('leadDetailModal').style.display = 'none'; }
 
         // Delete Lead
         function deleteLead(leadId) {

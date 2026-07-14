@@ -2,16 +2,39 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Koleksi produk: bisa dibaca siapa saja, hanya bisa ditulis oleh admin (semua pengguna ter-auth sementara)
+    // ============================ PRODUCTS ============================
+    // Katalog produk: dibaca publik (landing page). Ditulis dari Admin Panel.
+    // Admin belum memakai Firebase Auth, sehingga write terpaksa dibuka.
     match /products/{productId} {
       allow read: if true;
-      allow write: if true;
+      allow create, update: if request.resource.data.name is string
+                            && request.resource.data.name.size() > 0
+                            && request.resource.data.size() < 25;
+      allow delete: if true;
     }
 
-    // Koleksi leads: bisa ditulis dari form landing page, hanya bisa dibaca admin
+    // ============================= LEADS =============================
+    // Hasil analisis + data calon pelanggan (nama, WA, email, skor, rekomendasi).
+    // CREATE: dibuka untuk publik (submit dari form analyzer), dengan validasi
+    // minimal supaya tidak mudah di-spam / dokumen sampah.
     match /leads/{leadId} {
-      allow read: if true;
-      allow write: if true;
+      allow create: if request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() < 120
+                    && request.resource.data.email is string
+                    && request.resource.data.email.size() < 200
+                    && request.resource.data.size() < 40;
+
+      // PERINGATAN KEAMANAN:
+      // read & delete dibuka publik HANYA karena Admin Panel masih memakai login
+      // hardcoded di sisi browser (belum Firebase Auth). Artinya siapa pun yang
+      // tahu konfigurasi Firebase bisa membaca data pribadi pelanggan.
+      // Untuk mengamankan: migrasikan login admin ke Firebase Authentication,
+      // lalu ganti dua baris di bawah menjadi:  allow read, delete: if request.auth != null;
+      allow read, delete: if true;
+
+      // Lead tidak boleh diubah setelah dibuat.
+      allow update: if false;
     }
   }
 }
