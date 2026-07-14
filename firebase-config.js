@@ -1,18 +1,18 @@
 // Firebase Configuration and Initialization
-// Silakan ganti config di bawah ini dengan kredensial Firebase Project Anda sendiri
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCSRv9FngUUknBEiIFPZEKdJe8qSwBWngc",
+  authDomain: "azarine-25eec.firebaseapp.com",
+  projectId: "azarine-25eec",
+  storageBucket: "azarine-25eec.firebasestorage.app",
+  messagingSenderId: "1023045938940",
+  appId: "1:1023045938940:web:9ac2a22a07842a39acb179",
+  measurementId: "G-VD2K8HE0XY"
 };
 
 let db = null;
 let useFirebase = false;
 
-// Cek apakah konfigurasi Firebase sudah diisi oleh pengguna
+// Cek konfigurasi Firebase
 if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
     try {
         firebase.initializeApp(firebaseConfig);

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Azarine Cosmetic</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
     <style>
         body {
             background-color: #f7f9f6;
@@ -197,7 +197,7 @@
                 </div>
                 <div>
                     <button onclick="logoutAdmin()" class="btn btn-secondary btn-sm">Keluar Sistem</button>
-                    <a href="index.html" class="btn btn-primary btn-sm" style="margin-left: 0.5rem;">Lihat Web Utama</a>
+                    <a href="../index.html" class="btn btn-primary btn-sm" style="margin-left: 0.5rem;">Lihat Web Utama</a>
                 </div>
             </div>
 
@@ -307,7 +307,7 @@
     <!-- Firebase SDK Compat & Config -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
+    <script src="../firebase-config.js"></script>
 
     <!-- Admin Panel Logic -->
     <script>
@@ -327,6 +327,7 @@
             document.getElementById("dashboardPanel").style.display = "none";
         }
 
+        // Show Dashboard
         function showDashboard() {
             document.getElementById("loginPanel").style.display = "none";
             document.getElementById("dashboardPanel").style.display = "block";
