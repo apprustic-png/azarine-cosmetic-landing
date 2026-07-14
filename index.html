@@ -71,58 +71,6 @@
         </div>
     </section>
 
-    <!-- =========== BENEFIT SECTION =========== -->
-    <section id="benefits" class="benefits">
-        <div class="container">
-            <div class="section-header">
-                <h2>Rahasia Kulit Sehat & Glowing Perempuan Indonesia</h2>
-                <p>Lebih dari sekadar kosmetik biasa, Azarine hadir memberikan solusi perawatan kulit harian yang nyaman, aman, dan sangat efektif.</p>
-            </div>
-            <div class="benefit-grid">
-                <div class="benefit-card">
-                    <div class="icon">☀️</div>
-                    <h3>Proteksi UV Tanpa Noda Putih (No White-Cast)</h3>
-                    <p>Rangkaian sunscreen legendaris kami memiliki tekstur gel-cair super ringan yang tidak menyumbat pori-pori dan bebas efek kusam.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="icon">💧</div>
-                    <h3>Nutrisi Alami Berkhasiat Tinggi</h3>
-                    <p>Diperkaya bahan alami pilihan seperti Royal Jelly, Aloe Vera, Centella Asiatica, dan Ginseng untuk menghidrasi hingga ke lapisan terdalam.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="icon">🧬</div>
-                    <h3>Solusi Sesuai Jenis Kulit</h3>
-                    <p>Apapun masalah kulit Anda—jerawat membandel, flek hitam, kering sensitif, hingga penuaan dini—kami punya solusinya.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="icon">💰</div>
-                    <h3>Kualitas Premium & Terjangkau</h3>
-                    <p>Skincare berteknologi tinggi berstandar internasional yang dapat diakses dengan harga yang sangat bersahabat.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- =========== PRODUCT SECTION =========== -->
-    <section id="products" class="products">
-        <div class="container">
-            <div class="section-header">
-                <h2>Temukan Skincare Terbaik untuk Masalah Kulitmu</h2>
-                <p>Klik kategori di bawah untuk menyaring produk sesuai kebutuhan Anda:</p>
-            </div>
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">Semua Produk</button>
-                <button class="filter-btn" data-filter="sunscreen">Sunscreen</button>
-                <button class="filter-btn" data-filter="serum">Serum</button>
-                <button class="filter-btn" data-filter="moisturizer">Moisturizer</button>
-                <button class="filter-btn" data-filter="facialwash">Facial Wash</button>
-            </div>
-            <div class="product-grid" id="productGrid">
-                <div class="loading-state">Sedang memuat katalog produk...</div>
-            </div>
-        </div>
-    </section>
-
     <!-- =========== AI SKIN ANALYZER SECTION =========== -->
     <section id="analyzer" class="analyzer-section">
         <div class="container">
@@ -134,27 +82,9 @@
 
             <div class="analyzer-card">
 
-                <!-- STEP INDICATOR -->
-                <div class="step-indicator">
-                    <div class="step active" id="stepDot1">
-                        <div class="step-dot">1</div>
-                        <span>Upload Foto</span>
-                    </div>
-                    <div class="step-line"></div>
-                    <div class="step" id="stepDot2">
-                        <div class="step-dot">2</div>
-                        <span>Data Diri</span>
-                    </div>
-                    <div class="step-line"></div>
-                    <div class="step" id="stepDot3">
-                        <div class="step-dot">3</div>
-                        <span>Hasil Analisis</span>
-                    </div>
-                </div>
-
                 <!-- STEP 1: UPLOAD FOTO -->
                 <div id="analyzerStep1" class="analyzer-step active">
-                    <h3>📸 Langkah 1: Upload atau Ambil Foto Wajahmu</h3>
+                    <h3>📸 Upload atau Ambil Foto Wajahmu</h3>
                     <p class="step-desc">Pastikan wajahmu terlihat jelas, pencahayaan cukup, dan tidak menggunakan masker atau kacamata hitam.</p>
 
                     <div class="upload-area" id="uploadArea" onclick="document.getElementById('photoInput').click()">
@@ -189,44 +119,7 @@
                     <div class="scan-wrap">
                         <img id="scanImg" class="scan-img" src="" alt="Pemindaian wajah">
                         <div class="holo" id="scanHolo" aria-hidden="true">
-                            <svg class="holo-mesh" viewBox="0 0 300 360" preserveAspectRatio="xMidYMid slice">
-                                <g class="mesh-lines">
-                                    <!-- latitude (wrap horizontal) -->
-                                    <path d="M100,95 Q150,105 200,95"/>
-                                    <path d="M78,130 Q150,145 222,130"/>
-                                    <path d="M68,155 Q150,170 232,155"/>
-                                    <path d="M62,195 Q150,212 238,195"/>
-                                    <path d="M72,225 Q150,242 228,225"/>
-                                    <path d="M92,255 Q150,270 208,255"/>
-                                    <path d="M118,290 Q150,305 182,290"/>
-                                    <!-- longitude (vertical) -->
-                                    <path d="M150,82 L150,316"/>
-                                    <path d="M120,95 Q112,200 132,300"/>
-                                    <path d="M180,95 Q188,200 168,300"/>
-                                    <path d="M96,120 Q82,195 100,272"/>
-                                    <path d="M204,120 Q218,195 200,272"/>
-                                    <!-- face outline / jaw -->
-                                    <path d="M100,95 Q54,180 120,300 Q150,322 180,300 Q246,180 200,95"/>
-                                </g>
-                                <g class="mesh-features">
-                                    <path d="M105,153 Q118,146 131,153 Q118,160 105,153 Z"/>
-                                    <path d="M169,153 Q182,146 195,153 Q182,160 169,153 Z"/>
-                                    <path d="M100,132 Q118,126 136,131"/>
-                                    <path d="M164,131 Q182,126 200,132"/>
-                                    <path d="M150,158 L150,200 M150,200 Q138,208 131,203 M150,200 Q162,208 169,203"/>
-                                    <path d="M126,255 Q150,250 174,255 Q150,265 126,255 Z"/>
-                                </g>
-                                <g class="mesh-dots">
-                                    <circle cx="150" cy="95" r="1.4"/><circle cx="150" cy="155" r="1.4"/>
-                                    <circle cx="150" cy="200" r="1.4"/><circle cx="150" cy="255" r="1.4"/>
-                                    <circle cx="150" cy="300" r="1.4"/><circle cx="118" cy="153" r="1.4"/>
-                                    <circle cx="182" cy="153" r="1.4"/><circle cx="90" cy="195" r="1.4"/>
-                                    <circle cx="210" cy="195" r="1.4"/><circle cx="131" cy="203" r="1.4"/>
-                                    <circle cx="169" cy="203" r="1.4"/><circle cx="100" cy="132" r="1.4"/>
-                                    <circle cx="200" cy="132" r="1.4"/><circle cx="126" cy="255" r="1.4"/>
-                                    <circle cx="174" cy="255" r="1.4"/><circle cx="150" cy="270" r="1.4"/>
-                                </g>
-                            </svg>
+                            <div class="holo-bits" id="holoBits"></div>
                             <div class="holo-grid"></div>
                             <div class="holo-scan"></div>
                             <div class="holo-reticle"><i></i><i></i><i></i><i></i></div>
@@ -237,7 +130,7 @@
 
                 <!-- STEP 2: FORM DATA DIRI -->
                 <div id="analyzerStep2" class="analyzer-step">
-                    <h3>📝 Langkah 2: Isi Data Dirimu</h3>
+                    <h3>📝 Isi Data Dirimu</h3>
                     <p class="step-desc">Data ini hanya digunakan untuk mengirimkan hasil analisis dan penawaran eksklusif kepadamu.</p>
 
                     <form id="analyzerForm" class="analyzer-form" onsubmit="submitAnalysis(event)">
@@ -370,6 +263,60 @@
             </div><!-- end .analyzer-card -->
         </div>
     </section>
+
+    <!-- =========== BENEFIT SECTION =========== -->
+    <section id="benefits" class="benefits">
+        <div class="container">
+            <div class="section-header">
+                <h2>Rahasia Kulit Sehat & Glowing Perempuan Indonesia</h2>
+                <p>Lebih dari sekadar kosmetik biasa, Azarine hadir memberikan solusi perawatan kulit harian yang nyaman, aman, dan sangat efektif.</p>
+            </div>
+            <div class="benefit-grid">
+                <div class="benefit-card">
+                    <div class="icon">☀️</div>
+                    <h3>Proteksi UV Tanpa Noda Putih (No White-Cast)</h3>
+                    <p>Rangkaian sunscreen legendaris kami memiliki tekstur gel-cair super ringan yang tidak menyumbat pori-pori dan bebas efek kusam.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">💧</div>
+                    <h3>Nutrisi Alami Berkhasiat Tinggi</h3>
+                    <p>Diperkaya bahan alami pilihan seperti Royal Jelly, Aloe Vera, Centella Asiatica, dan Ginseng untuk menghidrasi hingga ke lapisan terdalam.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">🧬</div>
+                    <h3>Solusi Sesuai Jenis Kulit</h3>
+                    <p>Apapun masalah kulit Anda—jerawat membandel, flek hitam, kering sensitif, hingga penuaan dini—kami punya solusinya.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">💰</div>
+                    <h3>Kualitas Premium & Terjangkau</h3>
+                    <p>Skincare berteknologi tinggi berstandar internasional yang dapat diakses dengan harga yang sangat bersahabat.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========== PRODUCT SECTION =========== -->
+    <section id="products" class="products">
+        <div class="container">
+            <div class="section-header">
+                <h2>Temukan Skincare Terbaik untuk Masalah Kulitmu</h2>
+                <p>Klik kategori di bawah untuk menyaring produk sesuai kebutuhan Anda:</p>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Semua Produk</button>
+                <button class="filter-btn" data-filter="sunscreen">Sunscreen</button>
+                <button class="filter-btn" data-filter="serum">Serum</button>
+                <button class="filter-btn" data-filter="moisturizer">Moisturizer</button>
+                <button class="filter-btn" data-filter="facialwash">Facial Wash</button>
+            </div>
+            <div class="product-grid" id="productGrid">
+                <div class="loading-state">Sedang memuat katalog produk...</div>
+            </div>
+        </div>
+    </section>
+
+
 
     <!-- =========== REVIEWS =========== -->
     <section id="reviews" class="reviews">
@@ -570,12 +517,34 @@
 
     // Facial recognition "theater": animasi deteksi wajah sebelum isi data.
     // Validasi wajah yang sebenarnya tetap dilakukan oleh AI saat analisis (is_face).
+    // Taburkan banyak hologram kecil (partikel) di atas foto
+    function spawnHoloBits() {
+        const wrap = document.getElementById('holoBits');
+        if (!wrap) return;
+        wrap.innerHTML = '';
+        const shapes = ['dot', 'ring', 'square', 'plus', 'hex'];
+        const count = 34;
+        for (let i = 0; i < count; i++) {
+            const b = document.createElement('span');
+            b.className = 'holo-bit ' + shapes[Math.floor(Math.random() * shapes.length)];
+            const size = 5 + Math.random() * 12;
+            b.style.left = (5 + Math.random() * 90) + '%';
+            b.style.top = (5 + Math.random() * 90) + '%';
+            b.style.width = size + 'px';
+            b.style.height = size + 'px';
+            b.style.animationDelay = (Math.random() * 2.5).toFixed(2) + 's';
+            b.style.animationDuration = (2 + Math.random() * 2.5).toFixed(2) + 's';
+            wrap.appendChild(b);
+        }
+    }
+
     let scanTimers = [];
     function startFaceScan() {
         if (!selectedImageBase64) { alert('Silakan pilih foto terlebih dahulu.'); return; }
         scanTimers.forEach(clearTimeout); scanTimers = [];
         const holo = document.getElementById('scanHolo');
         holo.classList.remove('locked');
+        spawnHoloBits();
         document.getElementById('scanImg').src = document.getElementById('photoPreview').src;
         document.getElementById('scanTitle').innerText = '🔍 Menganalisis Wajah...';
         document.getElementById('scanSub').innerText = 'Sistem facial recognition sedang memetakan kontur dan tekstur kulitmu.';

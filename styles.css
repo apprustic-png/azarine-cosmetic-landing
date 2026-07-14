@@ -267,16 +267,30 @@ body { font-family: var(--font-stack); color: var(--text-main); background: var(
     background: repeating-linear-gradient(0deg, rgba(56,225,255,0.05) 0 1px, transparent 1px 4px);
     opacity: 0.5;
 }
-.holo-mesh {
-    position: absolute; inset: 0; width: 100%; height: 100%;
-    filter: drop-shadow(0 0 3px rgba(56,225,255,0.9));
-    opacity: 0; transform-origin: center;
-    animation: meshIn 0.9s ease forwards 0.2s;
+/* banyak hologram kecil bertaburan */
+.holo-bits { position: absolute; inset: 0; }
+.holo-bit {
+    position: absolute; display: block; transform: translate(-50%, -50%);
+    color: #4fe6ff; opacity: 0; box-sizing: border-box;
+    filter: drop-shadow(0 0 4px rgba(56,225,255,0.9));
+    animation: holoBit 3s ease-in-out infinite;
 }
-.holo-mesh path { fill: none; stroke: #38e1ff; stroke-width: 0.8; opacity: 0.6; }
-.holo-mesh .mesh-features path { stroke: #8af1ff; stroke-width: 1; opacity: 0.85; }
-.holo-mesh .mesh-dots circle { fill: #baf6ff; animation: dotPulse 1.6s infinite; }
-.holo-mesh .mesh-dots circle:nth-child(odd) { animation-delay: 0.8s; }
+.holo-bit.dot { border-radius: 50%; background: #7fefff; }
+.holo-bit.ring { border-radius: 50%; border: 1.5px solid #4fe6ff; }
+.holo-bit.square { border: 1.5px solid #4fe6ff; transform: translate(-50%, -50%) rotate(45deg); }
+.holo-bit.hex {
+    background: rgba(79,230,255,0.55);
+    clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+}
+.holo-bit.plus { background:
+    linear-gradient(#4fe6ff,#4fe6ff) center/100% 1.5px no-repeat,
+    linear-gradient(#4fe6ff,#4fe6ff) center/1.5px 100% no-repeat; }
+@keyframes holoBit {
+    0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+    25% { opacity: 0.9; }
+    50% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+    75% { opacity: 0.9; }
+}
 /* garis pindai horizontal bercahaya */
 .holo-scan {
     position: absolute; left: 0; right: 0; height: 46px;
@@ -320,7 +334,9 @@ body { font-family: var(--font-stack); color: var(--text-main); background: var(
 .holo.locked .holo-scan { display: none; }
 .holo.locked .holo-reticle { inset: 9%; }
 .holo.locked .holo-reticle i { border-color: #9dffce; filter: drop-shadow(0 0 7px rgba(120,255,190,0.95)); }
-.holo.locked .holo-mesh path { stroke: #9dffce; }
+.holo.locked .holo-bit { color: #9dffce; filter: drop-shadow(0 0 5px rgba(120,255,190,0.95)); }
+.holo.locked .holo-bit.dot { background: #b6ffd8; }
+.holo.locked .holo-bit.ring, .holo.locked .holo-bit.square { border-color: #9dffce; }
 .holo.locked .holo-hud { color: #b6ffd8; text-shadow: 0 0 7px rgba(120,255,190,0.9); }
 .holo.locked .holo-hud::before { background: #7dffb0; box-shadow: 0 0 7px #7dffb0; animation: none; }
 
