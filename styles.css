@@ -240,43 +240,94 @@ body { font-family: var(--font-stack); color: var(--text-main); background: var(
     .result-cta { flex-direction: column; }
 }
 
-/* ===================== FACE SCAN (facial recognition) ===================== */
+/* ============== FACIAL RECOGNITION HOLOGRAM (blue) ============== */
 .scan-wrap {
-    position: relative; max-width: 340px; margin: 1.5rem auto 0;
-    border-radius: 18px; overflow: hidden; box-shadow: var(--card-shadow);
-    background: #0b1a0b;
+    position: relative; width: 300px; max-width: 88%; aspect-ratio: 3/3.6;
+    margin: 1.5rem auto 0; border-radius: 20px; overflow: hidden;
+    background: #04121c;
+    box-shadow: 0 0 0 1px rgba(56,225,255,0.25), 0 12px 40px rgba(6,110,150,0.35);
 }
-.scan-img { display: block; width: 100%; height: auto; filter: saturate(1.05) contrast(1.03); }
-.scan-overlay { position: absolute; inset: 0; }
-.scan-frame { position: absolute; inset: 12%; }
-.scan-frame i {
-    position: absolute; width: 26px; height: 26px; border: 3px solid var(--secondary-light);
-    filter: drop-shadow(0 0 4px rgba(255,229,76,0.8));
+.scan-img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    filter: saturate(0.85) contrast(1.05) brightness(0.92);
 }
-.scan-frame i:nth-child(1){ top:0; left:0; border-right:0; border-bottom:0; }
-.scan-frame i:nth-child(2){ top:0; right:0; border-left:0; border-bottom:0; }
-.scan-frame i:nth-child(3){ bottom:0; left:0; border-right:0; border-top:0; }
-.scan-frame i:nth-child(4){ bottom:0; right:0; border-left:0; border-top:0; }
-.scan-line {
-    position: absolute; left: 6%; right: 6%; height: 3px; top: 10%;
-    background: linear-gradient(90deg, transparent, var(--primary-light), var(--secondary), var(--primary-light), transparent);
-    box-shadow: 0 0 14px 3px rgba(133,187,92,0.7);
-    animation: scanMove 1.6s ease-in-out infinite;
+/* tint biru tipis di atas foto */
+.scan-wrap::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, rgba(6,80,120,0.35), rgba(4,18,28,0.55));
+    mix-blend-mode: screen;
 }
-@keyframes scanMove { 0%{ top:8%; } 50%{ top:88%; } 100%{ top:8%; } }
-.scan-status { max-width: 340px; margin: 1.2rem auto 0; display: flex; flex-direction: column; gap: 0.5rem; }
-.scan-check {
-    font-size: 0.92rem; color: var(--text-muted); opacity: 0.55;
-    transition: var(--transition); padding-left: 1.6rem; position: relative;
+.holo {
+    position: absolute; inset: 0; pointer-events: none; z-index: 3;
+    animation: holoFlicker 3.4s infinite steps(1);
 }
-.scan-check::before { content: '⏳'; position: absolute; left: 0; }
-.scan-check.done { opacity: 1; color: var(--primary-dark); font-weight: 600; }
-.scan-check.done::before { content: '✅'; }
-.scan-success {
-    font-size: 1.3rem; font-weight: 800; color: var(--primary-dark);
-    animation: popIn 0.4s cubic-bezier(0.18,0.89,0.32,1.28);
+/* garis scanline CRT hologram */
+.holo::after {
+    content: ''; position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, rgba(56,225,255,0.05) 0 1px, transparent 1px 4px);
+    opacity: 0.5;
 }
-@keyframes popIn { from{ transform: scale(0.6); opacity: 0; } to{ transform: scale(1); opacity: 1; } }
+.holo-mesh {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    filter: drop-shadow(0 0 3px rgba(56,225,255,0.9));
+    opacity: 0; transform-origin: center;
+    animation: meshIn 0.9s ease forwards 0.2s;
+}
+.holo-mesh path { fill: none; stroke: #38e1ff; stroke-width: 0.8; opacity: 0.6; }
+.holo-mesh .mesh-features path { stroke: #8af1ff; stroke-width: 1; opacity: 0.85; }
+.holo-mesh .mesh-dots circle { fill: #baf6ff; animation: dotPulse 1.6s infinite; }
+.holo-mesh .mesh-dots circle:nth-child(odd) { animation-delay: 0.8s; }
+/* garis pindai horizontal bercahaya */
+.holo-scan {
+    position: absolute; left: 0; right: 0; height: 46px;
+    background: linear-gradient(180deg, transparent, rgba(56,225,255,0.18) 45%, rgba(160,245,255,0.85) 50%, rgba(56,225,255,0.18) 55%, transparent);
+    box-shadow: 0 0 18px 4px rgba(56,225,255,0.55);
+    animation: holoScan 2.4s cubic-bezier(0.45,0,0.55,1) infinite;
+}
+@keyframes holoScan { 0%{ top:-10%; } 100%{ top:100%; } }
+/* grid halus */
+.holo-grid {
+    position: absolute; inset: 0; opacity: 0.18;
+    background-image:
+        linear-gradient(rgba(56,225,255,0.6) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,225,255,0.6) 1px, transparent 1px);
+    background-size: 26px 26px;
+    mask-image: radial-gradient(ellipse 60% 70% at 50% 48%, #000 55%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 70% at 50% 48%, #000 55%, transparent 78%);
+}
+/* reticle sudut (lock-on) */
+.holo-reticle { position: absolute; inset: 14%; transition: inset 0.4s ease; }
+.holo-reticle i {
+    position: absolute; width: 22px; height: 22px; border: 2px solid #4fe6ff;
+    filter: drop-shadow(0 0 5px rgba(56,225,255,0.9));
+}
+.holo-reticle i:nth-child(1){ top:0; left:0; border-right:0; border-bottom:0; }
+.holo-reticle i:nth-child(2){ top:0; right:0; border-left:0; border-bottom:0; }
+.holo-reticle i:nth-child(3){ bottom:0; left:0; border-right:0; border-top:0; }
+.holo-reticle i:nth-child(4){ bottom:0; right:0; border-left:0; border-top:0; }
+/* HUD teks */
+.holo-hud {
+    position: absolute; top: 10px; left: 12px; z-index: 4;
+    font-family: 'Courier New', monospace; font-size: 0.68rem; letter-spacing: 1px;
+    color: #7fefff; text-shadow: 0 0 6px rgba(56,225,255,0.8); padding-left: 12px;
+}
+.holo-hud::before {
+    content: ''; position: absolute; left: 0; top: 3px; width: 7px; height: 7px;
+    border-radius: 50%; background: #4fe6ff; box-shadow: 0 0 6px #4fe6ff;
+    animation: hudBlink 0.9s steps(1) infinite;
+}
+/* state: lock-on saat analisis "berhasil" */
+.holo.locked .holo-scan { display: none; }
+.holo.locked .holo-reticle { inset: 9%; }
+.holo.locked .holo-reticle i { border-color: #9dffce; filter: drop-shadow(0 0 7px rgba(120,255,190,0.95)); }
+.holo.locked .holo-mesh path { stroke: #9dffce; }
+.holo.locked .holo-hud { color: #b6ffd8; text-shadow: 0 0 7px rgba(120,255,190,0.9); }
+.holo.locked .holo-hud::before { background: #7dffb0; box-shadow: 0 0 7px #7dffb0; animation: none; }
+
+@keyframes meshIn { from{ opacity:0; transform: scale(1.06); } to{ opacity:1; transform: scale(1); } }
+@keyframes dotPulse { 0%,100%{ opacity:0.25; } 50%{ opacity:1; } }
+@keyframes hudBlink { 0%,50%{ opacity:1; } 51%,100%{ opacity:0.15; } }
+@keyframes holoFlicker { 0%,100%{ opacity:1; } 92%{ opacity:1; } 94%{ opacity:0.82; } 96%{ opacity:1; } 97%{ opacity:0.9; } }
 
 /* ===================== SKIN HEALTH SCORES / CHARTS ===================== */
 .result-scores { margin-top: 2rem; }

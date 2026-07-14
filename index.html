@@ -182,25 +182,56 @@
                     </div>
                 </div>
 
-                <!-- STEP 1.5: FACE SCAN (facial recognition) -->
+                <!-- STEP 1.5: FACIAL RECOGNITION SCAN (hologram) -->
                 <div id="analyzerScan" class="analyzer-step">
-                    <h3>🧠 Mendeteksi Wajah...</h3>
-                    <p class="step-desc">Teknologi facial recognition sedang memetakan titik-titik wajahmu.</p>
+                    <h3 id="scanTitle">🔍 Menganalisis Wajah...</h3>
+                    <p class="step-desc" id="scanSub">Sistem facial recognition sedang memetakan kontur dan tekstur kulitmu.</p>
                     <div class="scan-wrap">
-                        <img id="scanImg" src="" alt="Pemindaian wajah" class="scan-img">
-                        <div class="scan-overlay" id="scanOverlay">
-                            <div class="scan-frame"><i></i><i></i><i></i><i></i></div>
-                            <div class="scan-line"></div>
+                        <img id="scanImg" class="scan-img" src="" alt="Pemindaian wajah">
+                        <div class="holo" id="scanHolo" aria-hidden="true">
+                            <svg class="holo-mesh" viewBox="0 0 300 360" preserveAspectRatio="xMidYMid slice">
+                                <g class="mesh-lines">
+                                    <!-- latitude (wrap horizontal) -->
+                                    <path d="M100,95 Q150,105 200,95"/>
+                                    <path d="M78,130 Q150,145 222,130"/>
+                                    <path d="M68,155 Q150,170 232,155"/>
+                                    <path d="M62,195 Q150,212 238,195"/>
+                                    <path d="M72,225 Q150,242 228,225"/>
+                                    <path d="M92,255 Q150,270 208,255"/>
+                                    <path d="M118,290 Q150,305 182,290"/>
+                                    <!-- longitude (vertical) -->
+                                    <path d="M150,82 L150,316"/>
+                                    <path d="M120,95 Q112,200 132,300"/>
+                                    <path d="M180,95 Q188,200 168,300"/>
+                                    <path d="M96,120 Q82,195 100,272"/>
+                                    <path d="M204,120 Q218,195 200,272"/>
+                                    <!-- face outline / jaw -->
+                                    <path d="M100,95 Q54,180 120,300 Q150,322 180,300 Q246,180 200,95"/>
+                                </g>
+                                <g class="mesh-features">
+                                    <path d="M105,153 Q118,146 131,153 Q118,160 105,153 Z"/>
+                                    <path d="M169,153 Q182,146 195,153 Q182,160 169,153 Z"/>
+                                    <path d="M100,132 Q118,126 136,131"/>
+                                    <path d="M164,131 Q182,126 200,132"/>
+                                    <path d="M150,158 L150,200 M150,200 Q138,208 131,203 M150,200 Q162,208 169,203"/>
+                                    <path d="M126,255 Q150,250 174,255 Q150,265 126,255 Z"/>
+                                </g>
+                                <g class="mesh-dots">
+                                    <circle cx="150" cy="95" r="1.4"/><circle cx="150" cy="155" r="1.4"/>
+                                    <circle cx="150" cy="200" r="1.4"/><circle cx="150" cy="255" r="1.4"/>
+                                    <circle cx="150" cy="300" r="1.4"/><circle cx="118" cy="153" r="1.4"/>
+                                    <circle cx="182" cy="153" r="1.4"/><circle cx="90" cy="195" r="1.4"/>
+                                    <circle cx="210" cy="195" r="1.4"/><circle cx="131" cy="203" r="1.4"/>
+                                    <circle cx="169" cy="203" r="1.4"/><circle cx="100" cy="132" r="1.4"/>
+                                    <circle cx="200" cy="132" r="1.4"/><circle cx="126" cy="255" r="1.4"/>
+                                    <circle cx="174" cy="255" r="1.4"/><circle cx="150" cy="270" r="1.4"/>
+                                </g>
+                            </svg>
+                            <div class="holo-grid"></div>
+                            <div class="holo-scan"></div>
+                            <div class="holo-reticle"><i></i><i></i><i></i><i></i></div>
+                            <div class="holo-hud" id="holoHud">SCANNING</div>
                         </div>
-                    </div>
-                    <div class="scan-status">
-                        <div class="scan-check" id="sc1">📍 Memetakan struktur wajah...</div>
-                        <div class="scan-check" id="sc2">🧬 Menganalisis tekstur permukaan kulit...</div>
-                        <div class="scan-check" id="sc3">🎯 Mendeteksi area yang perlu perhatian...</div>
-                    </div>
-                    <div id="scanDone" style="display:none; text-align:center; margin-top:1.5rem;">
-                        <div class="scan-success">✅ Wajah Terdeteksi!</div>
-                        <button class="btn btn-primary" onclick="showAnalyzerStep('analyzerStep2')" style="margin-top:1rem;">Lanjut Isi Data →</button>
                     </div>
                 </div>
 
@@ -542,22 +573,27 @@
     let scanTimers = [];
     function startFaceScan() {
         if (!selectedImageBase64) { alert('Silakan pilih foto terlebih dahulu.'); return; }
-        // reset state
         scanTimers.forEach(clearTimeout); scanTimers = [];
-        ['sc1', 'sc2', 'sc3'].forEach(id => document.getElementById(id).classList.remove('done'));
-        document.getElementById('scanDone').style.display = 'none';
-        document.getElementById('scanOverlay').style.display = 'block';
+        const holo = document.getElementById('scanHolo');
+        holo.classList.remove('locked');
         document.getElementById('scanImg').src = document.getElementById('photoPreview').src;
+        document.getElementById('scanTitle').innerText = '🔍 Menganalisis Wajah...';
+        document.getElementById('scanSub').innerText = 'Sistem facial recognition sedang memetakan kontur dan tekstur kulitmu.';
+        document.getElementById('holoHud').innerText = 'SCANNING';
         showAnalyzerStep('analyzerScan');
 
-        // munculkan centang bertahap
-        scanTimers.push(setTimeout(() => document.getElementById('sc1').classList.add('done'), 1100));
-        scanTimers.push(setTimeout(() => document.getElementById('sc2').classList.add('done'), 2300));
-        scanTimers.push(setTimeout(() => document.getElementById('sc3').classList.add('done'), 3400));
+        // HUD readout halus (bagian dari realisme hologram, bukan checklist)
+        scanTimers.push(setTimeout(() => { document.getElementById('holoHud').innerText = 'MAPPING 68 POINTS'; }, 1400));
+        scanTimers.push(setTimeout(() => { document.getElementById('holoHud').innerText = 'ANALYZING TEXTURE'; }, 2600));
+        // lock-on: analisis wajah "berhasil"
         scanTimers.push(setTimeout(() => {
-            document.getElementById('scanOverlay').style.display = 'none';
-            document.getElementById('scanDone').style.display = 'block';
-        }, 4000));
+            holo.classList.add('locked');
+            document.getElementById('holoHud').innerText = 'FACE MATCH ✓';
+            document.getElementById('scanTitle').innerText = '✅ Analisis Wajah Berhasil';
+            document.getElementById('scanSub').innerText = 'Isi datamu agar hasil analisis lengkap bisa kami kirimkan.';
+        }, 3600));
+        // lanjut otomatis ke form
+        scanTimers.push(setTimeout(() => showAnalyzerStep('analyzerStep2'), 4700));
     }
 
     // Cocokkan nama produk rekomendasi AI dengan katalog Firestore (untuk ambil gambar/harga/link)
