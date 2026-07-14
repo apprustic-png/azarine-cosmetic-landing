@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Mencegah crawler mengindeks halaman spesifik seperti keranjang, checkout, dan akun pengguna
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /account/
+Disallow: /admin/
+Disallow: /search
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+
+# Mencegah crawler berbahaya atau bot spam
+User-agent: Baiduspider
+Disallow: /
+User-agent: YandexBot
+Disallow: /
+
+# Menunjukkan lokasi sitemap untuk mempermudah Googlebot mengindeks halaman utama dan produk
+Sitemap: https://azarinecosmetic.com/sitemap.xml
+Sitemap: https://azarinecosmetic.com/sitemap_products.xml

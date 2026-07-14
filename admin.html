@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Azarine Cosmetic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: #f7f9f6;
+        }
+        .admin-login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .login-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
+            max-width: 450px;
+            width: 100%;
+            border: 1px solid rgba(85, 139, 47, 0.1);
+        }
+        .login-card h2 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+            text-align: center;
+        }
+        .login-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            font-family: var(--font-stack);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: var(--primary-light);
+        }
+        .admin-dashboard {
+            display: none;
+            min-height: 100vh;
+            padding: 3rem 0;
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            border-bottom: 2px dashed rgba(85, 139, 47, 0.1);
+            padding-bottom: 1.5rem;
+        }
+        .dashboard-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .dashboard-nav-btn {
+            background: white;
+            border: 2px solid var(--primary-light);
+            color: var(--primary);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .dashboard-nav-btn.active, .dashboard-nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .admin-section {
+            display: none;
+        }
+        .admin-section.active {
+            display: block;
+        }
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+        }
+        @media (max-width: 992px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        .white-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0,0,0,0.02);
+            margin-bottom: 2rem;
+        }
+        .white-card h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 0.5rem;
+        }
+        .data-table-wrapper {
+            overflow-x: auto;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        .data-table th, .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .data-table th {
+            background-color: var(--bg-light);
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        .btn-danger {
+            background-color: #e53935;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #b71c1c;
+            box-shadow: 0 4px 15px rgba(229, 57, 53, 0.3);
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .checkbox-group input {
+            width: auto;
+        }
+        .img-preview {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN PANEL -->
+    <div id="loginPanel" class="admin-login-container">
+        <div class="login-card">
+            <h2>Admin Login Panel</h2>
+            <p>Kelola data produk dan prospek (leads) Azarine Cosmetic</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email Admin</label>
+                    <input type="email" id="loginEmail" placeholder="Masukkan email admin" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Kata Sandi</label>
+                    <input type="password" id="loginPassword" placeholder="Masukkan kata sandi" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Masuk Sistem</button>
+                <div id="loginFeedback" style="color: red; text-align: center; margin-top: 1rem; font-size: 0.9rem;"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DASHBOARD PANEL -->
+    <div id="dashboardPanel" class="admin-dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <div>
+                    <h1>Azarine Admin Dashboard</h1>
+                    <p>Selamat datang, <strong id="adminUserEmail">leonafariz01@gmail.com</strong></p>
+                </div>
+                <div>
+                    <button onclick="logoutAdmin()" class="btn btn-secondary btn-sm">Keluar Sistem</button>
+                    <a href="index.html" class="btn btn-primary btn-sm" style="margin-left: 0.5rem;">Lihat Web Utama</a>
+                </div>
+            </div>
+
+            <!-- Tab Menu -->
+            <div class="dashboard-nav">
+                <button class="dashboard-nav-btn active" onclick="switchSection('produkSec')">Kelola Produk</button>
+                <button class="dashboard-nav-btn" onclick="switchSection('leadsSec')">Kelola Leads Formulir</button>
+            </div>
+
+            <!-- SECTION KELOLA PRODUK -->
+            <div id="produkSec" class="admin-section active">
+                <div class="grid-layout">
+                    <!-- Form Tambah Produk -->
+                    <div class="white-card">
+                        <h3>Tambah Produk Baru</h3>
+                        <form id="addProductForm">
+                            <div class="form-group">
+                                <label for="prodName">Nama Produk</label>
+                                <input type="text" id="prodName" placeholder="Contoh: Hydrasoothe Sunscreen Gel" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prodCategory">Kategori</label>
+                                <select id="prodCategory" required>
+                                    <option value="sunscreen">Sunscreen</option>
+                                    <option value="serum">Serum</option>
+                                    <option value="moisturizer">Moisturizer</option>
+                                    <option value="facialwash">Facial Wash</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="prodDesc">Deskripsi Singkat</label>
+                                <textarea id="prodDesc" rows="3" placeholder="Deskripsi manfaat produk..." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="prodIngredients">Kandungan Utama</label>
+                                <input type="text" id="prodIngredients" placeholder="Contoh: Niacinamide, Royal Jelly, Aloe Vera" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prodPrice">Harga / Rentang Harga</label>
+                                <input type="text" id="prodPrice" placeholder="Contoh: Rp 66.000" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prodImage">Tautan Gambar Produk (Link)</label>
+                                <input type="url" id="prodImage" placeholder="Masukkan URL gambar bebas/publik" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="prodLink">Tautan Pembelian (Shopee/Tokopedia)</label>
+                                <input type="url" id="prodLink" placeholder="https://shopee.co.id/..." required>
+                            </div>
+                            <div class="form-group checkbox-group">
+                                <input type="checkbox" id="prodBestSeller">
+                                <label for="prodBestSeller">Set sebagai Best Seller</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Tambahkan Produk</button>
+                        </form>
+                    </div>
+
+                    <!-- Tabel Daftar Produk -->
+                    <div class="white-card">
+                        <h3>Daftar Produk Aktif</h3>
+                        <div class="data-table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Gambar</th>
+                                        <th>Nama Produk</th>
+                                        <th>Kategori</th>
+                                        <th>Harga</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productTableBody">
+                                    <!-- Diisi dinamis -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION KELOLA LEADS -->
+            <div id="leadsSec" class="admin-section">
+                <div class="white-card">
+                    <h3>Daftar Leads / Calon Pelanggan</h3>
+                    <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Nama & Email prospek yang mendaftar dari formulir lead magnet gratis.</p>
+                    <div class="data-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Email</th>
+                                    <th>Waktu Registrasi</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leadsTableBody">
+                                <!-- Diisi dinamis -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Firebase SDK Compat & Config -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <!-- Admin Panel Logic -->
+    <script>
+        // Check Login State on load
+        document.addEventListener("DOMContentLoaded", () => {
+            const loggedIn = sessionStorage.getItem("adminLoggedIn");
+            if (loggedIn === "true") {
+                showDashboard();
+            } else {
+                showLogin();
+            }
+        });
+
+        // Toggle Views
+        function showLogin() {
+            document.getElementById("loginPanel").style.display = "flex";
+            document.getElementById("dashboardPanel").style.display = "none";
+        }
+
+        function showDashboard() {
+            document.getElementById("loginPanel").style.display = "none";
+            document.getElementById("dashboardPanel").style.display = "block";
+            loadAdminProducts();
+            loadAdminLeads();
+        }
+
+        // Switch Sections (Tabs)
+        function switchSection(secId) {
+            const sections = document.querySelectorAll(".admin-section");
+            sections.forEach(sec => sec.classList.remove("active"));
+            document.getElementById(secId).classList.add("active");
+
+            const buttons = document.querySelectorAll(".dashboard-nav-btn");
+            buttons.forEach(btn => btn.classList.remove("active"));
+            event.target.classList.add("active");
+        }
+
+        // Login Handler
+        document.getElementById("loginForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const email = document.getElementById("loginEmail").value.trim();
+            const password = document.getElementById("loginPassword").value.trim();
+            const feedback = document.getElementById("loginFeedback");
+
+            // Hardcode validation
+            if (email === "leonafariz01@gmail.com" && password === "admin123") {
+                sessionStorage.setItem("adminLoggedIn", "true");
+                feedback.innerText = "";
+                showDashboard();
+            } else {
+                feedback.innerText = "Email atau kata sandi admin salah!";
+            }
+        });
+
+        // Logout Handler
+        function logoutAdmin() {
+            sessionStorage.removeItem("adminLoggedIn");
+            showLogin();
+        }
+
+        // Load Products in Admin Panel
+        function loadAdminProducts() {
+            const tableBody = document.getElementById("productTableBody");
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Memuat produk...</td></tr>';
+
+            db.collection("products").get().then((querySnapshot) => {
+                tableBody.innerHTML = '';
+                let hasProducts = false;
+                
+                querySnapshot.forEach((doc) => {
+                    hasProducts = true;
+                    const prod = doc.data();
+                    const prodId = doc.id;
+
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td><img src="${prod.image}" class="img-preview" onerror="this.src='https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=400'"></td>
+                        <td><strong>${prod.name}</strong></td>
+                        <td><span class="category-tag">${prod.category}</span></td>
+                        <td>${prod.price}</td>
+                        <td>
+                            <button onclick="deleteProduct('${prodId}')" class="btn btn-danger btn-sm">Hapus</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+
+                if (!hasProducts) {
+                    tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Katalog produk kosong.</td></tr>';
+                }
+            }).catch(err => {
+                console.error(err);
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Gagal memuat produk.</td></tr>';
+            });
+        }
+
+        // Add Product Form Submit
+        document.getElementById("addProductForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const newProduct = {
+                name: document.getElementById("prodName").value,
+                category: document.getElementById("prodCategory").value,
+                desc: document.getElementById("prodDesc").value,
+                ingredients: document.getElementById("prodIngredients").value,
+                price: document.getElementById("prodPrice").value,
+                image: document.getElementById("prodImage").value,
+                link: document.getElementById("prodLink").value,
+                isBestSeller: document.getElementById("prodBestSeller").checked
+            };
+
+            db.collection("products").add(newProduct).then(() => {
+                alert("Produk berhasil ditambahkan!");
+                document.getElementById("addProductForm").reset();
+                loadAdminProducts();
+            }).catch(err => {
+                alert("Gagal menambahkan produk: " + err);
+            });
+        });
+
+        // Delete Product
+        function deleteProduct(prodId) {
+            if (confirm("Apakah Anda yakin ingin menghapus produk ini?")) {
+                db.collection("products").doc(prodId).delete().then(() => {
+                    alert("Produk berhasil dihapus!");
+                    loadAdminProducts();
+                }).catch(err => {
+                    alert("Gagal menghapus produk: " + err);
+                });
+            }
+        }
+
+        // Load Leads Form Submissions
+        function loadAdminLeads() {
+            const tableBody = document.getElementById("leadsTableBody");
+            tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Memuat data prospek...</td></tr>';
+
+            db.collection("leads").get().then((querySnapshot) => {
+                tableBody.innerHTML = '';
+                let hasLeads = false;
+
+                querySnapshot.forEach((doc) => {
+                    hasLeads = true;
+                    const lead = doc.data();
+                    const leadId = doc.id;
+                    const formattedDate = new Date(lead.timestamp).toLocaleString("id-ID");
+
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${lead.name}</td>
+                        <td><a href="mailto:${lead.email}">${lead.email}</a></td>
+                        <td>${formattedDate}</td>
+                        <td>
+                            <button onclick="deleteLead('${leadId}')" class="btn btn-danger btn-sm">Hapus</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+
+                if (!hasLeads) {
+                    tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Belum ada prospek/leads terdaftar.</td></tr>';
+                }
+            }).catch(err => {
+                console.error(err);
+                tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: red;">Gagal memuat data leads.</td></tr>';
+            });
+        }
+
+        // Delete Lead
+        function deleteLead(leadId) {
+            if (confirm("Apakah Anda yakin ingin menghapus prospek ini?")) {
+                db.collection("leads").doc(leadId).delete().then(() => {
+                    alert("Leads berhasil dihapus!");
+                    loadAdminLeads();
+                }).catch(err => {
+                    alert("Gagal menghapus leads: " + err);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

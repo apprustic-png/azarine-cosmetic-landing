@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azarine Cosmetic - Skincare Lokal Tropis Terbaik | BPOM & Halal</title>
+    <meta name="description" content="Dapatkan kulit sehat, cerah merata, dan bebas masalah jerawat dengan rangkaian skincare alami Azarine. Temukan Sunscreen, Serum, Moisturizer, dan Facial Wash terbaik.">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Header / Navigation Bar -->
+    <header class="navbar">
+        <div class="container">
+            <h1 class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">Azarine<span>.</span></h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#home">Beranda</a></li>
+                    <li><a href="#benefits">Mengapa Azarine</a></li>
+                    <li><a href="#products">Produk Unggulan</a></li>
+                    <li><a href="#leads">Hadiah Gratis</a></li>
+                    <li><a href="#reviews">Ulasan</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="admin.html" style="color: var(--secondary-dark);">Admin Panel</a></li>
+                </ul>
+            </nav>
+            <div class="nav-cta">
+                <a href="https://shopee.co.id/azarinecosmetic" target="_blank" class="btn btn-primary btn-sm">Cek Promo Shopee</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container hero-container">
+            <div class="hero-text">
+                <span class="badge">#1 Best Skincare Lokal untuk Iklim Tropis 🇮🇩</span>
+                <h2>Lindungi & Rawat Kulit Cantikmu dengan Kebaikan Alam! 🌿</h2>
+                <p>Dapatkan kulit sehat, cerah merata, dan bebas masalah jerawat dengan rangkaian skincare alami Azarine. Diformulasikan khusus tanpa bahan kimia berbahaya, 0% Alkohol, ramah untuk kulit sensitif, serta bersertifikasi BPOM & Halal MUI.</p>
+                <div class="hero-cta">
+                    <a href="#products" class="btn btn-primary">Lihat Produk Unggulan</a>
+                    <a href="#leads" class="btn btn-secondary">Dapatkan Voucher 10%</a>
+                </div>
+                <div class="trust-badges">
+                    <div class="badge-item"><span>✅</span> BPOM RI</div>
+                    <div class="badge-item"><span>🕌</span> 100% Halal</div>
+                    <div class="badge-item"><span>🧪</span> Dermatested</div>
+                    <div class="badge-item"><span>🐰</span> Cruelty Free</div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-shapes">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+        </div>
+    </section>
+
+    <!-- Benefit Section -->
+    <section id="benefits" class="benefits">
+        <div class="container">
+            <div class="section-header">
+                <h2>Rahasia Kulit Sehat & Glowing Perempuan Indonesia</h2>
+                <p>Lebih dari sekadar kosmetik biasa, Azarine hadir memberikan solusi perawatan kulit harian yang nyaman, aman, dan sangat efektif.</p>
+            </div>
+            <div class="benefit-grid">
+                <div class="benefit-card">
+                    <div class="icon">☀️</div>
+                    <h3>Proteksi UV Tanpa Noda Putih (No White-Cast)</h3>
+                    <p>Rangkaian sunscreen legendaris kami memiliki tekstur gel-cair super ringan yang tidak menyumbat pori-pori dan bebas efek kusam.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">💧</div>
+                    <h3>Nutrisi Alami Berkhasiat Tinggi</h3>
+                    <p>Diperkaya bahan alami pilihan seperti Royal Jelly, Aloe Vera, Centella Asiatica, dan Ginseng untuk menghidrasi hingga ke lapisan terdalam.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">🧬</div>
+                    <h3>Solusi Sesuai Jenis Kulit</h3>
+                    <p>Apapun masalah kulit Anda—jerawat membandel, flek hitam, kering sensitif, hingga penuaan dini—kami punya solusinya.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">💰</div>
+                    <h3>Kualitas Premium & Terjangkau</h3>
+                    <p>Skincare berteknologi tinggi berstandar internasional yang dapat diakses dengan harga yang sangat bersahabat.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase Section (Dynamic from Firestore/LocalStorage) -->
+    <section id="products" class="products">
+        <div class="container">
+            <div class="section-header">
+                <h2>Temukan Skincare Terbaik untuk Masalah Kulitmu</h2>
+                <p>Silakan klik kategori di bawah untuk menyaring produk yang sesuai dengan kebutuhan Anda:</p>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Semua Produk</button>
+                <button class="filter-btn" data-filter="sunscreen">Sunscreen</button>
+                <button class="filter-btn" data-filter="serum">Serum</button>
+                <button class="filter-btn" data-filter="moisturizer">Moisturizer</button>
+                <button class="filter-btn" data-filter="facialwash">Facial Wash</button>
+            </div>
+
+            <div class="product-grid" id="productGrid">
+                <!-- Memuat produk secara dinamis via JavaScript -->
+                <div class="loading-state">Sedang memuat katalog produk...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lead Magnet Section -->
+    <section id="leads" class="leads-magnet">
+        <div class="container leads-container">
+            <div class="leads-card">
+                <div class="leads-text">
+                    <span class="magnet-badge">🎁 HADIAH SPESIAL</span>
+                    <h2>Dapatkan E-Book Panduan Kulit Glowing & Voucher Diskon 10%!</h2>
+                    <p>Masukkan nama dan email aktif Anda untuk mendapatkan panduan praktis perawatan kulit tropis langsung ke email Anda beserta voucher diskon 10% eksklusif untuk pembelanjaan pertama.</p>
+                </div>
+                <form id="leadForm" class="leads-form">
+                    <div class="input-group">
+                        <input type="text" id="leadName" placeholder="Nama Lengkap Anda" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="leadEmail" placeholder="Email Aktif Anda" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Kirim E-Book & Voucher Saya!</button>
+                </form>
+                <div id="formFeedback" class="form-feedback"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof / Reviews Section -->
+    <section id="reviews" class="reviews">
+        <div class="container">
+            <div class="section-header">
+                <h2>Apa Kata Mereka Tentang Azarine?</h2>
+                <p>Ribuan wanita Indonesia telah membuktikan keampuhan rangkaian skincare alami dari Azarine.</p>
+            </div>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="rating">⭐️⭐️⭐️⭐️⭐️</div>
+                    <p>"Azarine Hydrasoothe Sunscreen Gel bener-bener game changer buat aku! Teksturnya gel dingin banget, nggak bikin kusam, dan satu-satunya sunscreen yang nggak bikin mukaku jerawatan. Repurchase terus!"</p>
+                    <div class="author">
+                        <h4>Rania, 23 Tahun</h4>
+                        <span>Skincare Enthusiast</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="rating">⭐️⭐️⭐️⭐️⭐️</div>
+                    <p>"Dulu mukaku kusam banget gara-gara sering kuliah lapangan. Setelah rutin pakai Niacinamide Serum dan Moisturizer Azarine, banyak yang puji mukaku jadi cerahan dan lebih lembap. Harganya juga ramah banget di kantong mahasiswa."</p>
+                    <div class="author">
+                        <h4>Devi, 20 Tahun</h4>
+                        <span>Mahasiswi (Kulit Kombinasi)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Pertanyaan yang Sering Diajukan (FAQ)</h2>
+                <p>Temukan jawaban cepat mengenai keamanan dan kenyamanan produk Azarine di bawah ini.</p>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3 class="faq-question">Apakah produk Azarine aman untuk ibu hamil dan menyusui?</h3>
+                    <p class="faq-answer">Sebagian besar produk Azarine aman digunakan oleh ibu hamil dan menyusui karena diformulasikan dari bahan alami. Namun, untuk produk yang mengandung bahan aktif tinggi seperti retinol (Advanced Youth Barrier), kami sarankan Anda berkonsultasi terlebih dahulu dengan dokter kandungan.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Apakah produk Azarine sudah terdaftar BPOM dan bersertifikat Halal?</h3>
+                    <p class="faq-answer">Ya, seluruh rangkaian produk perawatan kulit Azarine telah diuji secara klinis, terdaftar resmi di BPOM RI, serta memiliki sertifikat 100% Halal resmi dari MUI Indonesia.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Di mana saya bisa membeli produk Azarine yang dijamin original?</h3>
+                    <p class="faq-answer">Untuk jaminan keaslian 100%, belilah produk melalui toko resmi kami (Official Store) di Shopee Mall, Tokopedia Official Store, atau gerai ritel kesehatan fisik ternama seperti Watsons dan Guardian.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-cta">
+                <h2>Siap Dapatkan Kulit Impianmu Sekarang?</h2>
+                <p>Jangan tunda kesehatan kulitmu. Dapatkan penawaran promo gratis ongkir dan diskon menarik di official store kami hari ini.</p>
+                <div class="footer-buttons">
+                    <a href="https://shopee.co.id/azarinecosmetic" target="_blank" class="btn btn-primary">Toko Resmi Shopee</a>
+                    <a href="https://www.tokopedia.com/azarinecosmetic" target="_blank" class="btn btn-secondary">Toko Resmi Tokopedia</a>
+                </div>
+            </div>
+            
+            <div class="footer-info">
+                <div class="footer-col">
+                    <h3>Kontak Kami</h3>
+                    <p>WhatsApp: +62 812-xxxx-xxxx</p>
+                    <p>Instagram: @azarinecosmeticofficial</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Lokasi</h3>
+                    <p>Sidoarjo, Jawa Timur</p>
+                    <p>Indonesia</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Azarine Cosmetic. All rights reserved. Created for SEO & High Conversion.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK Compat & Config Initialization -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <!-- Main Logic Script -->
+    <script>
+        let currentFilter = 'all';
+
+        // Load Products from database (Firestore or LocalStorage Fallback)
+        function loadProducts() {
+            const grid = document.getElementById("productGrid");
+            grid.innerHTML = '<div class="loading-state">Sedang memuat katalog produk...</div>';
+
+            db.collection("products").get().then((querySnapshot) => {
+                grid.innerHTML = '';
+                let hasProducts = false;
+                
+                querySnapshot.forEach((doc) => {
+                    hasProducts = true;
+                    const product = doc.data();
+                    const pId = doc.id;
+                    
+                    // Buat elemen card produk
+                    const card = document.createElement("div");
+                    card.className = "product-card";
+                    card.setAttribute("data-category", product.category);
+                    card.style.display = (currentFilter === 'all' || product.category === currentFilter) ? 'flex' : 'none';
+
+                    card.innerHTML = `
+                        <div class="product-img-wrapper">
+                            <img src="${product.image || 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=400'}" alt="${product.name}" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=400'">
+                        </div>
+                        <div class="product-body">
+                            <div class="product-header">
+                                <span class="category-tag">${product.category}</span>
+                                ${product.isBestSeller ? '<span class="bestseller-tag">Best Seller 🔥</span>' : ''}
+                            </div>
+                            <h3>${product.name}</h3>
+                            <p class="desc">${product.desc}</p>
+                            <div class="ingredients"><strong>Kandungan:</strong> ${product.ingredients}</div>
+                        </div>
+                        <div class="price-action">
+                            <span class="price">${product.price}</span>
+                            <a href="${product.link || 'https://shopee.co.id/azarinecosmetic'}" target="_blank" class="btn btn-outline btn-sm">Beli Sekarang</a>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                if (!hasProducts) {
+                    grid.innerHTML = '<div class="no-products">Belum ada produk terdaftar. Hubungi admin untuk menambahkan produk.</div>';
+                }
+            }).catch((error) => {
+                console.error("Gagal mengambil data produk: ", error);
+                grid.innerHTML = '<div class="no-products">Terjadi kesalahan saat memuat katalog produk.</div>';
+            });
+        }
+
+        // Filter Category Function
+        function setupFiltering() {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentFilter = e.target.getAttribute('data-filter');
+                    
+                    const cards = document.querySelectorAll('.product-card');
+                    cards.forEach(card => {
+                        const cat = card.getAttribute('data-category');
+                        if (currentFilter === 'all' || cat === currentFilter) {
+                            card.style.display = 'flex';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+
+        // Submit Lead Form
+        document.getElementById("leadForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const name = document.getElementById("leadName").value;
+            const email = document.getElementById("leadEmail").value;
+            const feedback = document.getElementById("formFeedback");
+            
+            feedback.style.color = "var(--text-main)";
+            feedback.innerText = "Sedang mengirim data...";
+
+            db.collection("leads").add({
+                name: name,
+                email: email,
+                timestamp: new Date().toISOString()
+            }).then(() => {
+                feedback.style.color = "var(--primary-dark)";
+                feedback.innerText = "Success! E-Book dan voucher diskon 10% Anda telah dikirim ke " + email;
+                document.getElementById("leadForm").reset();
+            }).catch((error) => {
+                console.error("Error submitting lead: ", error);
+                feedback.style.color = "red";
+                feedback.innerText = "Gagal mengirim data. Silakan coba kembali nanti.";
+            });
+        });
+
+        // Initialize Page
+        document.addEventListener("DOMContentLoaded", () => {
+            loadProducts();
+            setupFiltering();
+        });
+    </script>
+</body>
+</html>
