@@ -1,0 +1,10 @@
+{
+  "name": "azarine-cosmetic-landing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Azarine Cosmetic landing page + Vertex AI skin analyzer serverless function",
+  "type": "module",
+  "dependencies": {
+    "google-auth-library": "^9.14.0"
+  }
+}
